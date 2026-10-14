@@ -18,8 +18,8 @@ for(const item of catalog.models){
   const phrase='Córdoba, español y 🧪';
   assert.equal(model.codec.decode(model.codec.encode(phrase)),phrase,'Tokenizer debe ser reversible');
   if(item.id==='v03')assert.ok(model.cfg.vocab_size>256 && model.codec.merges.length>0);
-  const logits=model.logits([...new TextEncoder().encode('Hola')]);
-  assert.equal(logits.length,256);
+  const logits=model.logits(model.codec.encode('Hola'));
+  assert.equal(logits.length,model.cfg.vocab_size);
   assert.ok([...logits].every(Number.isFinite));
   assert.equal(typeof await model.generate('Hola',{count:3}),'string');
   console.log('Inferencia real OK:',item.id);
