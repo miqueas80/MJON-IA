@@ -1,4 +1,4 @@
-// MJON Open-Base — worker autónomo: pesos de Qwen, no pesos del Transformer MJON.
+// MJON IA — cerebro heredado: pesos Qwen preentrenados, explícitamente derivados.
 // La biblioteca se importa solo tras la acción explícita "Descargar y ejecutar".
 const MODEL_ID = 'onnx-community/Qwen2.5-0.5B-Instruct';
 const TRANSFORMERS_URL = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1/+esm';

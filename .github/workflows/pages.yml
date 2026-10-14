@@ -42,11 +42,12 @@ jobs:
           python -m pip install -e . --no-deps
       - name: Ejecutar pruebas de regresión
         run: python -m unittest discover -s tests -v
-      - name: Verificar interfaz Open-Base sin descargar modelos
+      - name: Validar herencia neuronal en interfaz única
         run: |
-          node --check docs/web/open-base.mjs
-          node --check docs/web/open-base-worker.mjs
-          node scripts/verify_open_base.mjs
+          node --check docs/web/app.mjs
+          node --check docs/web/inherited.mjs
+          node --check docs/web/inherited-worker.mjs
+          node scripts/verify_inherited.mjs
       - name: Entrenar y exportar v0.1 y v0.2
         run: python scripts/build_web_models.py
       - name: Crear corpus sintético propio para v0.3

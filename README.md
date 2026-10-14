@@ -139,10 +139,6 @@ No se incorpora una dependencia en tiempo de ejecución: la inferencia de v0.8 o
 
 [Diseño, reproducibilidad y licencias](docs/DISTILLATION_V08.md).
 
-## MJON Universidad · Open-Base (experiencia conversacional derivada)
+## Herencia neuronal: cerebro preentrenado integrado
 
-Además de MJON Original, hay un aula independiente en **[Open-Base](https://miqueas80.github.io/MJON-IA/open-base.html)**. Ejecuta localmente un modelo preentrenado de unos 500 millones de parámetros de Qwen mediante Transformers.js + WebGPU. **No es MJON Original ni representa una transferencia completa de conocimientos**; se identifica claramente la procedencia Apache 2.0 del modelo y se conservan las versiones nativas sin cambios.
-
-La descarga inicial de los pesos cuantizados es optativa y grande (aprox. 483 MB–786 MB más auxiliares); requiere Internet y WebGPU. El navegador puede conservar parte de los recursos en caché, pero no se promete una experiencia 100% offline. Los mensajes no se envían a servicios de inferencia; los cálculos se realizan en el dispositivo después de la carga. El aula incluye evaluaciones humanas exportables, sin calificación automática inventada.
-
-[Protocolo, licencias, requisitos y limitaciones](docs/OPEN_BASE.md).
+La **misma interfaz principal de MJON IA** ahora permite activar un cerebro heredado desde pesos preentrenados de Qwen2.5-0.5B-Instruct (Apache 2.0), descargados de forma voluntaria y ejecutados localmente con WebGPU. No hay una segunda aplicación o universidad. Elegir el cerebro heredado no reentrena automáticamente MJON Original: sigue identificado como variante derivada y el Transformer original continúa entrenándose mediante destilación de respuestas del maestro. [Arquitectura y limitaciones](docs/INHERITANCE.md).
