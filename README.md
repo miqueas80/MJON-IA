@@ -44,3 +44,9 @@ entrenamiento de CLI. Es un experimento de tokens, no un asistente fiable.
 Ahora se puede guardar y reanudar el optimizador y estado aleatorio, medir la validación de forma estable y separar diálogos por bloque para reducir filtración de ejemplos literales entre entrenamiento y validación. **La calidad del chat web no aumenta automáticamente.**
 
 [Instrucciones de entrenamiento v0.2](docs/TRAINING_V02.md).
+
+## Comparar modelos en la web
+
+La web permite alternar entre dos **modelos entrenados por separado**: perfil v0.1 (8.176 parámetros, contexto de 48 bytes) y perfil v0.2 (36.736 parámetros, contexto de 96 bytes). El flujo de GitHub Actions los entrena desde cero, genera pesos cuantizados y construye `docs/web/models.json`. El navegador descarga y ejecuta localmente el modelo seleccionado: no se conecta a una API de terceros para generar texto.
+
+Estas dos variantes usan un dataset minúsculo; **ninguna mantiene una conversación fiable**. Cambiar de versión no sustituye la necesidad de datasets amplios y evaluación. Los pesos no se guardan en `main`: se incluyen en el despliegue de Pages.

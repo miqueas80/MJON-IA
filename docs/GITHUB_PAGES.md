@@ -52,3 +52,16 @@ Abrí http://localhost:8000/docs/ para probar el sitio local.
 
 El modelo Python más grande de la CLI permanece disponible; el modelo web usa
 una configuración reducida para ejecutarse hasta en dispositivos modestos.
+
+## Comparador de versiones
+
+Se construyen dos pesos **independientes**, no dos nombres para el mismo checkpoint:
+
+| Perfil | Parámetros | Contexto | Entrenamiento |
+| --- | ---: | ---: | --- |
+| v0.1 mínimo | 8.176 | 48 bytes | 800 pasos, división heredada por bytes |
+| v0.2 ampliado | 36.736 | 96 bytes | 900 pasos, separación de diálogos |
+
+En el panel lateral elegí el modelo. La página descargará los pesos en ese momento y verificará su SHA-256. El entrenamiento ocurre solo en el ejecutor de GitHub Actions. Ambos modelos tienen resultados rudimentarios, no equivalen a asistentes funcionales; debido a las distintas particiones, sus pérdidas de validación tampoco son directamente comparables.
+
+El workflow verifica el manifiesto y prueba inferencia real de ambos modelos en JavaScript antes de publicar.

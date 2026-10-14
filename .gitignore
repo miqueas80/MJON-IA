@@ -8,3 +8,7 @@ checkpoints/
 *.pth
 *.safetensors
 .DS_Store
+
+# Artefactos web regenerados en GitHub Actions
+docs/web/models.json
+docs/web/weights-*.txt

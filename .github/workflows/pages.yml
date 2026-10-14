@@ -10,6 +10,7 @@ on:
       - 'scripts/**'
       - 'pyproject.toml'
       - 'data/demo.txt'
+      - 'tests/**'
   workflow_dispatch:
 
 permissions:
@@ -41,11 +42,12 @@ jobs:
           python -m pip install -e . --no-deps
       - name: Ejecutar pruebas de regresión
         run: python -m unittest discover -s tests -v
-      - name: Entrenar modelo propio de demostración
-        run: |
-          python -m mjon_ia.train --steps 800 --eval-every 200 --context 48 --d-model 16 --layers 1 --heads 2 --batch-size 16 --lr 0.001 --dropout 0 --device cpu --out checkpoints/browser.pt
-      - name: Exportar pesos a navegador
-        run: python scripts/export_web.py --checkpoint checkpoints/browser.pt --out docs/web/weights.txt
+      - name: Entrenar y exportar v0.1 y v0.2
+        run: python scripts/build_web_models.py
+      - name: Verificar catálogo y archivos de pesos
+        run: python scripts/verify_web_models.py
+      - name: Verificar inferencia JavaScript en ambas versiones
+        run: node scripts/verify_browser.mjs
       - name: Configurar Pages
         uses: actions/configure-pages@v5
       - name: Preparar contenido estático
