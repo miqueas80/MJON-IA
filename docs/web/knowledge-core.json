@@ -1,0 +1,727 @@
+{
+  "schema": "mjonia.grounded.v1",
+  "source": "src/mjon_ia/knowledge_v11.py",
+  "license": "CC0-1.0",
+  "items": [
+    {
+      "id": "mjon-0001",
+      "subject": "biologia",
+      "concept": "célula",
+      "answer": "La unidad básica estructural y funcional de los seres vivos."
+    },
+    {
+      "id": "mjon-0002",
+      "subject": "biologia",
+      "concept": "ADN",
+      "answer": "La molécula que almacena información genética hereditaria."
+    },
+    {
+      "id": "mjon-0003",
+      "subject": "biologia",
+      "concept": "mitosis",
+      "answer": "División celular que produce dos células hijas equivalentes."
+    },
+    {
+      "id": "mjon-0004",
+      "subject": "biologia",
+      "concept": "fotosíntesis",
+      "answer": "Proceso por el que organismos usan luz para producir sustancias orgánicas."
+    },
+    {
+      "id": "mjon-0005",
+      "subject": "biologia",
+      "concept": "respiración celular",
+      "answer": "Conjunto de reacciones que permite obtener energía química."
+    },
+    {
+      "id": "mjon-0006",
+      "subject": "biologia",
+      "concept": "tejido biológico",
+      "answer": "Conjunto organizado de células con funciones relacionadas."
+    },
+    {
+      "id": "mjon-0007",
+      "subject": "biologia",
+      "concept": "órgano",
+      "answer": "Estructura formada por tejidos que realizan funciones específicas."
+    },
+    {
+      "id": "mjon-0008",
+      "subject": "biologia",
+      "concept": "ecosistema",
+      "answer": "Conjunto de seres vivos y su ambiente en interacción."
+    },
+    {
+      "id": "mjon-0009",
+      "subject": "biologia",
+      "concept": "evolución biológica",
+      "answer": "Cambio de características hereditarias en poblaciones a lo largo de generaciones."
+    },
+    {
+      "id": "mjon-0010",
+      "subject": "biologia",
+      "concept": "homeostasis",
+      "answer": "Mantenimiento de condiciones internas relativamente estables."
+    },
+    {
+      "id": "mjon-0011",
+      "subject": "biologia",
+      "concept": "enzima",
+      "answer": "Molécula que acelera reacciones químicas biológicas."
+    },
+    {
+      "id": "mjon-0012",
+      "subject": "biologia",
+      "concept": "mutación genética",
+      "answer": "Cambio en la secuencia del material genético."
+    },
+    {
+      "id": "mjon-0013",
+      "subject": "quimica",
+      "concept": "átomo",
+      "answer": "Unidad de un elemento químico formada por núcleo y electrones."
+    },
+    {
+      "id": "mjon-0014",
+      "subject": "quimica",
+      "concept": "protón",
+      "answer": "Partícula subatómica con carga eléctrica positiva."
+    },
+    {
+      "id": "mjon-0015",
+      "subject": "quimica",
+      "concept": "electrón",
+      "answer": "Partícula subatómica con carga eléctrica negativa."
+    },
+    {
+      "id": "mjon-0016",
+      "subject": "quimica",
+      "concept": "neutrón",
+      "answer": "Partícula subatómica sin carga eléctrica neta."
+    },
+    {
+      "id": "mjon-0017",
+      "subject": "quimica",
+      "concept": "molécula",
+      "answer": "Conjunto definido de átomos unidos por enlaces químicos."
+    },
+    {
+      "id": "mjon-0018",
+      "subject": "quimica",
+      "concept": "elemento químico",
+      "answer": "Sustancia cuyos átomos tienen igual número de protones."
+    },
+    {
+      "id": "mjon-0019",
+      "subject": "quimica",
+      "concept": "compuesto químico",
+      "answer": "Sustancia formada por elementos distintos en proporción definida."
+    },
+    {
+      "id": "mjon-0020",
+      "subject": "quimica",
+      "concept": "reacción química",
+      "answer": "Transformación de sustancias mediante reorganización de enlaces."
+    },
+    {
+      "id": "mjon-0021",
+      "subject": "quimica",
+      "concept": "disolución",
+      "answer": "Mezcla homogénea de soluto y disolvente."
+    },
+    {
+      "id": "mjon-0022",
+      "subject": "quimica",
+      "concept": "pH",
+      "answer": "Medida relacionada con la actividad de los iones hidrógeno."
+    },
+    {
+      "id": "mjon-0023",
+      "subject": "quimica",
+      "concept": "enlace covalente",
+      "answer": "Enlace químico en el que se comparten electrones."
+    },
+    {
+      "id": "mjon-0024",
+      "subject": "quimica",
+      "concept": "oxidación",
+      "answer": "Proceso químico que implica pérdida de electrones."
+    },
+    {
+      "id": "mjon-0025",
+      "subject": "fisica",
+      "concept": "fuerza",
+      "answer": "Interacción capaz de cambiar el movimiento o deformar un cuerpo."
+    },
+    {
+      "id": "mjon-0026",
+      "subject": "fisica",
+      "concept": "masa",
+      "answer": "Magnitud que cuantifica la inercia de un cuerpo."
+    },
+    {
+      "id": "mjon-0027",
+      "subject": "fisica",
+      "concept": "aceleración",
+      "answer": "Cambio de velocidad por unidad de tiempo."
+    },
+    {
+      "id": "mjon-0028",
+      "subject": "fisica",
+      "concept": "velocidad",
+      "answer": "Variación de posición respecto del tiempo, con dirección y sentido."
+    },
+    {
+      "id": "mjon-0029",
+      "subject": "fisica",
+      "concept": "energía cinética",
+      "answer": "Energía asociada al movimiento de un cuerpo."
+    },
+    {
+      "id": "mjon-0030",
+      "subject": "fisica",
+      "concept": "trabajo mecánico",
+      "answer": "Transferencia de energía por una fuerza durante un desplazamiento."
+    },
+    {
+      "id": "mjon-0031",
+      "subject": "fisica",
+      "concept": "potencia",
+      "answer": "Cantidad de trabajo o energía transferida por unidad de tiempo."
+    },
+    {
+      "id": "mjon-0032",
+      "subject": "fisica",
+      "concept": "densidad",
+      "answer": "Relación entre la masa y el volumen de un material."
+    },
+    {
+      "id": "mjon-0033",
+      "subject": "fisica",
+      "concept": "temperatura",
+      "answer": "Magnitud relacionada con el estado térmico de un sistema."
+    },
+    {
+      "id": "mjon-0034",
+      "subject": "fisica",
+      "concept": "corriente eléctrica",
+      "answer": "Flujo neto de carga eléctrica por unidad de tiempo."
+    },
+    {
+      "id": "mjon-0035",
+      "subject": "fisica",
+      "concept": "resistencia eléctrica",
+      "answer": "Medida de oposición al paso de corriente eléctrica."
+    },
+    {
+      "id": "mjon-0036",
+      "subject": "fisica",
+      "concept": "presión",
+      "answer": "Fuerza normal ejercida por unidad de superficie."
+    },
+    {
+      "id": "mjon-0037",
+      "subject": "matematica",
+      "concept": "fracción",
+      "answer": "Expresión que representa partes o cocientes mediante numerador y denominador."
+    },
+    {
+      "id": "mjon-0038",
+      "subject": "matematica",
+      "concept": "porcentaje",
+      "answer": "Proporción expresada sobre una base de cien."
+    },
+    {
+      "id": "mjon-0039",
+      "subject": "matematica",
+      "concept": "número primo",
+      "answer": "Entero mayor que uno con exactamente dos divisores positivos."
+    },
+    {
+      "id": "mjon-0040",
+      "subject": "matematica",
+      "concept": "número par",
+      "answer": "Entero divisible entre dos sin resto."
+    },
+    {
+      "id": "mjon-0041",
+      "subject": "matematica",
+      "concept": "ecuación",
+      "answer": "Igualdad matemática que contiene una o más incógnitas."
+    },
+    {
+      "id": "mjon-0042",
+      "subject": "matematica",
+      "concept": "variable",
+      "answer": "Símbolo que representa un valor que puede cambiar."
+    },
+    {
+      "id": "mjon-0043",
+      "subject": "matematica",
+      "concept": "función matemática",
+      "answer": "Correspondencia que asigna a cada entrada una única salida."
+    },
+    {
+      "id": "mjon-0044",
+      "subject": "matematica",
+      "concept": "perímetro",
+      "answer": "Longitud total del contorno de una figura."
+    },
+    {
+      "id": "mjon-0045",
+      "subject": "matematica",
+      "concept": "área",
+      "answer": "Medida de la superficie de una figura."
+    },
+    {
+      "id": "mjon-0046",
+      "subject": "matematica",
+      "concept": "media aritmética",
+      "answer": "Suma de los valores dividida por su cantidad."
+    },
+    {
+      "id": "mjon-0047",
+      "subject": "matematica",
+      "concept": "probabilidad",
+      "answer": "Medida de la posibilidad de ocurrencia de un evento."
+    },
+    {
+      "id": "mjon-0048",
+      "subject": "matematica",
+      "concept": "valor absoluto",
+      "answer": "Distancia de un número al cero en la recta real."
+    },
+    {
+      "id": "mjon-0049",
+      "subject": "lengua",
+      "concept": "sustantivo",
+      "answer": "Palabra que nombra entidades, seres, lugares o conceptos."
+    },
+    {
+      "id": "mjon-0050",
+      "subject": "lengua",
+      "concept": "verbo",
+      "answer": "Palabra que expresa acciones, procesos o estados."
+    },
+    {
+      "id": "mjon-0051",
+      "subject": "lengua",
+      "concept": "adjetivo",
+      "answer": "Palabra que describe o califica al sustantivo."
+    },
+    {
+      "id": "mjon-0052",
+      "subject": "lengua",
+      "concept": "adverbio",
+      "answer": "Palabra que modifica un verbo, adjetivo u otro adverbio."
+    },
+    {
+      "id": "mjon-0053",
+      "subject": "lengua",
+      "concept": "sinónimo",
+      "answer": "Palabra con significado igual o semejante a otra."
+    },
+    {
+      "id": "mjon-0054",
+      "subject": "lengua",
+      "concept": "antónimo",
+      "answer": "Palabra con sentido opuesto al de otra."
+    },
+    {
+      "id": "mjon-0055",
+      "subject": "lengua",
+      "concept": "párrafo",
+      "answer": "Conjunto de oraciones que desarrolla una unidad temática."
+    },
+    {
+      "id": "mjon-0056",
+      "subject": "lengua",
+      "concept": "idea principal",
+      "answer": "Contenido central que organiza el sentido de un texto."
+    },
+    {
+      "id": "mjon-0057",
+      "subject": "lengua",
+      "concept": "metáfora",
+      "answer": "Recurso que presenta una cosa mediante otra por semejanza."
+    },
+    {
+      "id": "mjon-0058",
+      "subject": "lengua",
+      "concept": "argumento",
+      "answer": "Razón o conjunto de razones para sostener una afirmación."
+    },
+    {
+      "id": "mjon-0059",
+      "subject": "lengua",
+      "concept": "cohesión textual",
+      "answer": "Relación entre partes del texto mediante recursos lingüísticos."
+    },
+    {
+      "id": "mjon-0060",
+      "subject": "lengua",
+      "concept": "tesis argumentativa",
+      "answer": "Afirmación principal que un texto intenta defender."
+    },
+    {
+      "id": "mjon-0061",
+      "subject": "historia",
+      "concept": "fuente primaria",
+      "answer": "Testimonio o documento producido en la época estudiada."
+    },
+    {
+      "id": "mjon-0062",
+      "subject": "historia",
+      "concept": "fuente secundaria",
+      "answer": "Interpretación elaborada a partir de fuentes previas."
+    },
+    {
+      "id": "mjon-0063",
+      "subject": "historia",
+      "concept": "cronología",
+      "answer": "Organización de acontecimientos según su secuencia temporal."
+    },
+    {
+      "id": "mjon-0064",
+      "subject": "historia",
+      "concept": "revolución industrial",
+      "answer": "Transformación productiva impulsada por mecanización y fábricas."
+    },
+    {
+      "id": "mjon-0065",
+      "subject": "historia",
+      "concept": "independencia política",
+      "answer": "Condición de un territorio que no depende de otro Estado."
+    },
+    {
+      "id": "mjon-0066",
+      "subject": "historia",
+      "concept": "democracia",
+      "answer": "Sistema político que reconoce participación y soberanía popular."
+    },
+    {
+      "id": "mjon-0067",
+      "subject": "historia",
+      "concept": "constitución",
+      "answer": "Norma fundamental que organiza el Estado y reconoce derechos."
+    },
+    {
+      "id": "mjon-0068",
+      "subject": "historia",
+      "concept": "ciudadanía",
+      "answer": "Condición de pertenencia política con derechos y responsabilidades."
+    },
+    {
+      "id": "mjon-0069",
+      "subject": "historia",
+      "concept": "derechos humanos",
+      "answer": "Derechos inherentes a las personas por su dignidad."
+    },
+    {
+      "id": "mjon-0070",
+      "subject": "historia",
+      "concept": "patrimonio cultural",
+      "answer": "Bienes y expresiones que una comunidad valora y transmite."
+    },
+    {
+      "id": "mjon-0071",
+      "subject": "historia",
+      "concept": "reforma social",
+      "answer": "Cambio deliberado en instituciones o condiciones colectivas."
+    },
+    {
+      "id": "mjon-0072",
+      "subject": "historia",
+      "concept": "historiografía",
+      "answer": "Estudio de cómo se investiga y escribe la historia."
+    },
+    {
+      "id": "mjon-0073",
+      "subject": "geografia",
+      "concept": "latitud",
+      "answer": "Distancia angular respecto del ecuador expresada en grados."
+    },
+    {
+      "id": "mjon-0074",
+      "subject": "geografia",
+      "concept": "longitud geográfica",
+      "answer": "Distancia angular respecto del meridiano de referencia."
+    },
+    {
+      "id": "mjon-0075",
+      "subject": "geografia",
+      "concept": "clima",
+      "answer": "Patrón de condiciones atmosféricas durante períodos prolongados."
+    },
+    {
+      "id": "mjon-0076",
+      "subject": "geografia",
+      "concept": "tiempo atmosférico",
+      "answer": "Estado de la atmósfera en un lugar y momento."
+    },
+    {
+      "id": "mjon-0077",
+      "subject": "geografia",
+      "concept": "cuenca hidrográfica",
+      "answer": "Territorio cuyas aguas drenan hacia un mismo punto."
+    },
+    {
+      "id": "mjon-0078",
+      "subject": "geografia",
+      "concept": "bioma",
+      "answer": "Región con comunidades biológicas vinculadas al clima y ambiente."
+    },
+    {
+      "id": "mjon-0079",
+      "subject": "geografia",
+      "concept": "recurso renovable",
+      "answer": "Recurso que puede reponerse naturalmente bajo ciertas condiciones."
+    },
+    {
+      "id": "mjon-0080",
+      "subject": "geografia",
+      "concept": "urbanización",
+      "answer": "Proceso de crecimiento de población y espacios urbanos."
+    },
+    {
+      "id": "mjon-0081",
+      "subject": "geografia",
+      "concept": "migración",
+      "answer": "Desplazamiento de personas entre lugares de residencia."
+    },
+    {
+      "id": "mjon-0082",
+      "subject": "geografia",
+      "concept": "escala cartográfica",
+      "answer": "Relación entre distancia en un mapa y distancia real."
+    },
+    {
+      "id": "mjon-0083",
+      "subject": "geografia",
+      "concept": "relieve terrestre",
+      "answer": "Conjunto de formas y diferencias de altura del terreno."
+    },
+    {
+      "id": "mjon-0084",
+      "subject": "geografia",
+      "concept": "densidad demográfica",
+      "answer": "Habitantes por unidad de superficie en una región."
+    },
+    {
+      "id": "mjon-0085",
+      "subject": "informatica",
+      "concept": "algoritmo",
+      "answer": "Secuencia finita y ordenada de pasos para resolver un problema."
+    },
+    {
+      "id": "mjon-0086",
+      "subject": "informatica",
+      "concept": "variable informática",
+      "answer": "Espacio lógico asociado a un dato que puede cambiar."
+    },
+    {
+      "id": "mjon-0087",
+      "subject": "informatica",
+      "concept": "función informática",
+      "answer": "Bloque reutilizable de instrucciones con entradas y posibles salidas."
+    },
+    {
+      "id": "mjon-0088",
+      "subject": "informatica",
+      "concept": "condición lógica",
+      "answer": "Expresión que determina qué instrucciones se ejecutan."
+    },
+    {
+      "id": "mjon-0089",
+      "subject": "informatica",
+      "concept": "bucle",
+      "answer": "Estructura que repite instrucciones según una condición."
+    },
+    {
+      "id": "mjon-0090",
+      "subject": "informatica",
+      "concept": "base de datos",
+      "answer": "Conjunto organizado de datos que permite consultarlos."
+    },
+    {
+      "id": "mjon-0091",
+      "subject": "informatica",
+      "concept": "sistema operativo",
+      "answer": "Software que administra recursos y ofrece servicios a programas."
+    },
+    {
+      "id": "mjon-0092",
+      "subject": "informatica",
+      "concept": "memoria RAM",
+      "answer": "Memoria de trabajo volátil utilizada por programas en ejecución."
+    },
+    {
+      "id": "mjon-0093",
+      "subject": "informatica",
+      "concept": "código abierto",
+      "answer": "Software cuyo código fuente puede examinarse y modificarse según su licencia."
+    },
+    {
+      "id": "mjon-0094",
+      "subject": "informatica",
+      "concept": "cifrado",
+      "answer": "Transformación de información mediante una clave para proteger su confidencialidad."
+    },
+    {
+      "id": "mjon-0095",
+      "subject": "informatica",
+      "concept": "copia de seguridad",
+      "answer": "Duplicado de datos creado para recuperarlos ante una pérdida."
+    },
+    {
+      "id": "mjon-0096",
+      "subject": "informatica",
+      "concept": "red local",
+      "answer": "Conjunto de dispositivos conectados en un área limitada."
+    },
+    {
+      "id": "mjon-0097",
+      "subject": "pensamiento",
+      "concept": "premisa",
+      "answer": "Proposición utilizada como punto de partida de un argumento."
+    },
+    {
+      "id": "mjon-0098",
+      "subject": "pensamiento",
+      "concept": "conclusión",
+      "answer": "Proposición que se desprende de las premisas de un razonamiento."
+    },
+    {
+      "id": "mjon-0099",
+      "subject": "pensamiento",
+      "concept": "evidencia",
+      "answer": "Información que permite apoyar o cuestionar una afirmación."
+    },
+    {
+      "id": "mjon-0100",
+      "subject": "pensamiento",
+      "concept": "hipótesis",
+      "answer": "Explicación provisional que puede ponerse a prueba."
+    },
+    {
+      "id": "mjon-0101",
+      "subject": "pensamiento",
+      "concept": "experimento controlado",
+      "answer": "Prueba que compara condiciones manteniendo otras variables controladas."
+    },
+    {
+      "id": "mjon-0102",
+      "subject": "pensamiento",
+      "concept": "correlación",
+      "answer": "Relación estadística entre variables que no demuestra causalidad."
+    },
+    {
+      "id": "mjon-0103",
+      "subject": "pensamiento",
+      "concept": "causalidad",
+      "answer": "Relación en la que un factor contribuye a producir un efecto."
+    },
+    {
+      "id": "mjon-0104",
+      "subject": "pensamiento",
+      "concept": "sesgo de confirmación",
+      "answer": "Tendencia a favorecer información que apoya creencias previas."
+    },
+    {
+      "id": "mjon-0105",
+      "subject": "pensamiento",
+      "concept": "fuente confiable",
+      "answer": "Fuente cuya procedencia y evidencia pueden comprobarse."
+    },
+    {
+      "id": "mjon-0106",
+      "subject": "pensamiento",
+      "concept": "incertidumbre",
+      "answer": "Situación en la que no se conocen completamente los resultados."
+    },
+    {
+      "id": "mjon-0107",
+      "subject": "pensamiento",
+      "concept": "pensamiento crítico",
+      "answer": "Evaluación de afirmaciones mediante lógica y evidencia."
+    },
+    {
+      "id": "mjon-0108",
+      "subject": "pensamiento",
+      "concept": "reproducibilidad",
+      "answer": "Capacidad de obtener resultados coherentes al repetir un procedimiento."
+    },
+    {
+      "id": "mjon-0109",
+      "subject": "limites",
+      "concept": "color de mi mochila",
+      "answer": "No tengo esa información."
+    },
+    {
+      "id": "mjon-0110",
+      "subject": "limites",
+      "concept": "mi contraseña secreta",
+      "answer": "No conozco tu contraseña."
+    },
+    {
+      "id": "mjon-0111",
+      "subject": "limites",
+      "concept": "contenido de mi escritorio",
+      "answer": "No puedo verlo sin información."
+    },
+    {
+      "id": "mjon-0112",
+      "subject": "limites",
+      "concept": "clima exacto de mañana",
+      "answer": "Necesito datos meteorológicos actualizados."
+    },
+    {
+      "id": "mjon-0113",
+      "subject": "limites",
+      "concept": "lo que pienso ahora",
+      "answer": "No puedo leer tus pensamientos."
+    },
+    {
+      "id": "mjon-0114",
+      "subject": "limites",
+      "concept": "ubicación de mis llaves",
+      "answer": "No sé dónde están tus llaves."
+    },
+    {
+      "id": "mjon-0115",
+      "subject": "limites",
+      "concept": "edad de una persona desconocida",
+      "answer": "No tengo datos para determinarla."
+    },
+    {
+      "id": "mjon-0116",
+      "subject": "limites",
+      "concept": "resultado de una prueba no realizada",
+      "answer": "No se puede saber sin hacer la prueba."
+    },
+    {
+      "id": "mjon-0117",
+      "subject": "limites",
+      "concept": "identidad de una foto no compartida",
+      "answer": "No tengo acceso a esa foto."
+    },
+    {
+      "id": "mjon-0118",
+      "subject": "limites",
+      "concept": "precios actuales de una tienda",
+      "answer": "Necesito consultar precios actualizados."
+    },
+    {
+      "id": "mjon-0119",
+      "subject": "limites",
+      "concept": "nombre de mi mascota sin decirlo",
+      "answer": "No conozco ese dato."
+    },
+    {
+      "id": "mjon-0120",
+      "subject": "limites",
+      "concept": "contenido de un documento no entregado",
+      "answer": "No puedo saberlo sin ver el documento."
+    }
+  ]
+}

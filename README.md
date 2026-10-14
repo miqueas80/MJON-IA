@@ -214,3 +214,13 @@ Se incorporó una ruta **real de fine-tuning supervisado** del nuevo `MJONNeural
 Un generador reproducible produce **540 preguntas sobre 120 conceptos** de autoría original en formato JSONL, tanto para pruebas de preentrenamiento como de SFT. La evaluación `scripts/eval_neural_sft.py` compara la generación real, antes y después, en preguntas de grupos que nunca participaron en gradientes. No se publican automáticamente redes con pesos aleatorios o entrenamiento insuficiente.
 
 El workflow de pruebas rápidas ejecuta además un ciclo completo y pequeño de entrenamiento CPU, evaluando el funcionamiento del núcleo y del ajuste de instrucciones. Este material no es suficiente para igualar un LLM de frontera. [Ver metodología y comandos](docs/NEURAL_SFT.md).
+
+## ENTREGA FUNCIONAL: MJON IA verificable y local
+
+La interfaz principal de MJON ofrece ahora un **modo útil desde el primer arranque**: preguntas en lenguaje natural sobre 120 conceptos originales, algunas explicaciones/comparaciones/ejemplos, cálculos seguros y memoria breve de la conversación. Cada respuesta muestra si proviene de una ficha local, de un cálculo, de memoria temporal o si carece de evidencia. La operación no usa APIs externas y puede funcionar sin Internet tras una primera carga y caché correctas.
+
+**Transparencia:** este modo utiliza consultas a conocimientos documentados y código de cálculo; **no significa que la red neuronal propia haya aprendido esos 120 hechos**. La generación neuronal de MJON Original permanece disponible por separado, en el mismo chat, como opción experimental. No hay ningún modelo de un tercero ejecutándose por detrás.
+
+Se añadieron pruebas funcionales de 108 definiciones, aritmética, contexto y límites, además de un flujo **rápido de publicación** que reutiliza el último paquete neuronal ya compilado y validado. El entrenamiento completo de modelos históricos queda ejecutable manualmente para no bloquear lanzamientos con horas de compilación.
+
+[Ver funciones, test de aceptación, límites y despliegue](docs/RELEASE_FUNCTIONAL.md).

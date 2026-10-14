@@ -1,16 +1,8 @@
 name: Publicar MJON IA en GitHub Pages
 
+# Entrenamiento completo, pesado y reproducible. No reentrenar 12 redes
+# automáticamente para cada ajuste de UI: la producción usa pages-fast.yml.
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/pages.yml'
-      - 'docs/**'
-      - 'src/**'
-      - 'scripts/**'
-      - 'pyproject.toml'
-      - 'data/demo.txt'
-      - 'tests/**'
   workflow_dispatch:
 
 permissions:

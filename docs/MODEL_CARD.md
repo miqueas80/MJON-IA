@@ -96,3 +96,9 @@
 - **Entrenamiento:** pares pregunta-respuesta derivados de aristas `EXTRACTED` del grafo de código, positivos y negativos de ausencia de registro. Pérdida supervisada sobre tokens de respuesta; mezcla de currículo, memoria y escuela.
 - **Evaluación independiente:** aristas de prueba no utilizadas para gradientes ni selección, repaso escolar y memoria; progreso rechazado ante regresión de calibración.
 - **Limitación:** no hay nueva red neuronal gráfica, «conocimiento universal» ni acceso al grafo en la inferencia. No se pueden convertir aristas de código en capacidades generales por sí solas.
+
+## Modo local verificable: ficha de capacidades separada de los pesos
+
+La entrega funcional añade una capa de conocimientos explícitos en `docs/web/knowledge-core.json` (120 conceptos originales CC0), un intérprete aritmético restringido y memoria temporal. **Estas respuestas no se generan mediante el Transformer neuronal MJON** y no deben contarse como aciertos de evaluación neuronal. Están etiquetadas con fuente y mecanismo.
+
+La capacidad neuronal histórica sigue siendo experimental y cuenta con sus benchmarks propios, separados de la prueba funcional. La nueva experiencia local no justifica afirmar equivalencia con DeepSeek o Qwen. Comprobar tanto los tests automáticos como el uso móvil real, incluyendo caché offline, antes de venderlo como producto.

@@ -1,0 +1,80 @@
+name: MJON IA · publicar versión funcional verificada
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'scripts/test_grounding.mjs'
+      - '.github/workflows/pages-fast.yml'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  test-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Obtener versión principal
+        uses: actions/checkout@v4
+
+      - name: Validar JavaScript y conversación local
+        run: |
+          node --check docs/web/grounding.mjs
+          node --check docs/web/app.mjs
+          node --check docs/sw.js
+          node scripts/test_grounding.mjs
+          node scripts/verify_original_only.mjs
+
+      - name: Recuperar última publicación exitosa sin volver a entrenar
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          previous="$(gh run list --repo "$GITHUB_REPOSITORY" \
+            --workflow pages.yml --status success --limit 1 \
+            --json databaseId --jq '.[0].databaseId')"
+          if [[ -z "$previous" || "$previous" == "null" ]]; then
+            echo "No hay un checkpoint web publicado previamente. Ejecutá pages.yml manualmente." >&2
+            exit 1
+          fi
+          echo "Se recuperará el artefacto histórico verificado de la ejecución $previous"
+          mkdir -p "$RUNNER_TEMP/previous-pages" site
+          gh run download "$previous" --repo "$GITHUB_REPOSITORY" \
+            --name github-pages --dir "$RUNNER_TEMP/previous-pages"
+          test -s "$RUNNER_TEMP/previous-pages/artifact.tar"
+          tar -xf "$RUNNER_TEMP/previous-pages/artifact.tar" -C site
+          test -s site/web/models.json
+          test -n "$(find site/web -maxdepth 1 -name 'weights-*.txt' -print -quit)"
+          # Prevalece el código fuente actual; los modelos publicados se preservan.
+          cp -a docs/. site/
+          test -s site/web/grounding.mjs
+          test -s site/web/knowledge-core.json
+          test -s site/sw.js
+          node -e "const fs=require('fs');const data=JSON.parse(fs.readFileSync('site/web/models.json')); console.log('Neurales históricos preservados:',data.models.length); if(data.models.length < 8) process.exit(1)"
+          echo 'Asistente local y pesos históricos unidos correctamente.'
+
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Empaquetar sitio MJON sin entrenamientos repetidos
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./site
+
+      - name: Publicar MJON IA
+        id: deployment
+        uses: actions/deploy-pages@v4

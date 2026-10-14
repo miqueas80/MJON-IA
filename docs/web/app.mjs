@@ -1,10 +1,26 @@
 import {decodeWeights, MJONTransformer} from './runtime.mjs';
+import {createMJONGroundedCore} from './grounding.mjs';
 
 const $ = id => document.getElementById(id);
 const form=$('chat-form'), input=$('prompt'), messages=$('messages');
 const status=$('status'),send=$('send'),stop=$('stop'),reset=$('reset'),selector=$('model-select');
 let model=null, models=[], benchmark=null, firstwords=null, memoryScores=null, schoolScores=null, distillScores=null, distillScoresV09=null, continualScoresV10=null, knowledgeScoresV11=null, graphifyScoresV12=null, busy=false, abort=false, serial=0;
 let session=[];
+let grounded=null;
+let groundedMode=true;
+function canAnswer(){return groundedMode?Boolean(grounded):Boolean(model);}
+function updateGroundedState(){
+  groundedMode=$('grounded-mode').checked;
+  send.disabled=busy||!canAnswer();
+  $('grounding-status').textContent=groundedMode
+    ? (grounded? 'Activo · '+grounded.size+' conceptos revisables · sin Internet después de cargar'
+               : 'Cargando conocimiento local…')
+    : 'Generación neuronal experimental; las respuestas pueden ser incorrectas.';
+  if(!busy)setStatus(groundedMode?(grounded?'Asistente local listo':'Cargando…'):
+    (model?'Modelo neuronal experimental':'Modelo neuronal no disponible'),
+    groundedMode&&grounded?'ready':'');
+}
+
 
 function setStatus(value,kind=''){status.textContent=value;status.dataset.kind=kind;}
 function bubble(role,text){
@@ -16,14 +32,16 @@ function bubble(role,text){
   return content;
 }
 function setBusy(value){
-  busy=value;send.disabled=value||!model;stop.disabled=!value;
+  busy=value;send.disabled=value||!canAnswer();stop.disabled=!value;
+  $('grounded-mode').disabled=value;
   input.disabled=value;selector.disabled=value;
 }
 function clear(){
   if(busy)return;
   session=[];
+  grounded?.reset();
   messages.replaceChildren();
-  bubble('system','Estos modelos son experimentales y generan tokens, no respuestas fiables. Elegí una versión para comparar. No ingreses información sensible.');
+  bubble('system','MJON IA: consultá conocimientos locales verificables, hacé cálculos o probá el Transformer experimental. No ingreses información sensible.');
 }
 function enableModelSelection(items){
   selector.replaceChildren();
@@ -38,7 +56,7 @@ async function loadModel(id){
   const selected=models.find(entry=>entry.id===id);
   if(!selected)throw new Error('Versión inexistente');
   const request=++serial;
-  model=null;selector.disabled=true;send.disabled=true;
+  model=null;selector.disabled=true;send.disabled=!groundedMode||!grounded;
   setStatus('Cargando '+selected.label+'…');
   try{
     const response=await fetch('./web/'+selected.file,{cache:'no-cache'});
@@ -105,16 +123,36 @@ async function loadModel(id){
     }
     $('last-run').textContent='—';
     messages.replaceChildren();clear();
-    setStatus('Modelo cargado · listo','ready');
+    setStatus(groundedMode?'Asistente local listo':'Modelo neuronal listo','ready');
   }catch(error){
     if(request!==serial)return;
-    setStatus('No se pudo cargar','error');
-    bubble('system','Error al cargar '+selected.label+': '+error.message);
+    setStatus(groundedMode&&grounded?'Asistente local disponible':'No se pudo cargar',
+      groundedMode&&grounded?'ready':'error');
+    bubble('system','No se pudo cargar el modelo neuronal '+selected.label+': '+error.message+
+      '. El asistente local puede seguir funcionando si está activado.');
   }finally{
-    if(request===serial){send.disabled=!model;selector.disabled=false;}
+    if(request===serial){send.disabled=!canAnswer();selector.disabled=false;}
   }
 }
 reset.addEventListener('click',clear);
+$('grounded-mode').addEventListener('change',()=>{
+  if(busy)return;
+  updateGroundedState();
+  $('answer-evidence').textContent=groundedMode
+     ?'El modo local distingue conocimientos documentados y cálculos.'
+     :'Generación neuronal libre; puede inventar respuestas.';
+  const examples=$('examples');examples.replaceChildren();
+  const list=groundedMode
+    ?['¿Qué es una célula?','¿Diferencia entre átomo y molécula?',
+      '¿Cuánto es (18 + 6) / 3?','¿Qué significa código abierto?','Me llamo Alex']
+    :['¿Qué es un átomo?','Explicá qué es aprender.','Hola.'];
+  for(const question of list){
+    const b=document.createElement('button');
+    b.type='button';b.dataset.prompt=question;
+    b.textContent=question.length>42?question.slice(0,39)+'…':question;
+    examples.append(b);
+  }
+});
 stop.addEventListener('click',()=>{abort=true;stop.disabled=true});
 selector.addEventListener('change',()=>{if(!busy)loadModel(selector.value)});
 $('examples').addEventListener('click',e=>{
@@ -123,12 +161,27 @@ $('examples').addEventListener('click',e=>{
 });
 $('temperature').addEventListener('input',e=>{$('temp-value').textContent=Number(e.target.value).toFixed(2)});
 form.addEventListener('submit',async e=>{
-  e.preventDefault();if(!model||busy)return;
+  e.preventDefault();if(!canAnswer()||busy)return;
   const question=input.value.trim();if(!question)return;
   bubble('user',question);input.value='';
   const answer=bubble('assistant','Generando…');abort=false;setBusy(true);
   setStatus('Generando en tu dispositivo','working');const start=performance.now();
   try{
+    if(groundedMode&&grounded){
+      const result=grounded.respond(question);
+      answer.textContent=result.text;
+      $('answer-evidence').textContent=result.sources?.length
+        ?'Fuente: '+result.sources.join(', ')+' · '+(result.subject||'ficha MJON')
+        :result.kind==='calculo'
+         ?'Fuente: cálculo local verificado por algoritmo (sin eval)'
+         :result.kind==='limite'
+          ?'Respuesta prudente: no hay evidencia local suficiente.'
+          :'Respuesta local: '+result.kind+'.';
+      $('last-run').textContent=((performance.now()-start)/1000).toFixed(3)+' s · local';
+      setStatus('Asistente local listo','ready');
+      return;
+    }
+    $('answer-evidence').textContent='Salida neuronal experimental · sin garantía factual.';
     const history=['v06','v07','v08','v09','v10','v11','v12'].includes(selector.value)
      ?session.map(turn=>`Usuario: ${turn.question}\nAsistente: ${turn.answer}\n`).join('')
      :'';
@@ -148,7 +201,18 @@ form.addEventListener('submit',async e=>{
   finally{setBusy(false);input.focus();}
 });
 async function init(){
-  clear();setStatus('Buscando modelos…');
+  clear();setStatus('Cargando conocimiento local…');
+  try{
+    const response=await fetch('./web/knowledge-core.json',{cache:'no-cache'});
+    if(!response.ok)throw Error('HTTP '+response.status);
+    const data=await response.json();
+    grounded=createMJONGroundedCore(data);
+    updateGroundedState();
+    $('answer-evidence').textContent='120 fichas del currículo MJON · atribución local verificable.';
+  }catch(error){
+    $('grounding-status').textContent='No disponible: '+error.message;
+    bubble('system','El conocimiento local no se cargó. Los modelos anteriores aún pueden utilizarse.');
+  }
   try{
     const response=await fetch('./web/models.json',{cache:'no-cache'});
     if(!response.ok)throw new Error('Catálogo no disponible: HTTP '+response.status);
@@ -169,6 +233,16 @@ async function init(){
     const selected=models[models.length-1].id;
     selector.value=selected;
     await loadModel(selected);
-  }catch(error){setStatus('Error al iniciar','error');bubble('system','No se pudo inicializar MJON IA: '+error.message+'. Revisá GitHub Actions.');}
+  }catch(error){
+    if(groundedMode&&grounded){setStatus('Asistente local listo','ready');send.disabled=false;}
+    else setStatus('Modelos experimentales no disponibles','error');
+    bubble('system','El catálogo de modelos experimentales no está disponible: '+
+      error.message+'. El asistente local sigue operativo si está activado.');
+  }
+}
+if('serviceWorker' in navigator && location.protocol==='https:'){
+  navigator.serviceWorker.register('./sw.js').catch(()=>{
+    // La falta de Service Worker no impide ejecutar el asistente en línea.
+  });
 }
 init();
