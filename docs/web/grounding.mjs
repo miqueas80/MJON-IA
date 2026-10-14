@@ -142,7 +142,9 @@ function mathQuestion(input){
 }
 function findConcepts(text,items){
   const words=tokenize(text);
-  const n=normalize(text);
+  // Separar la puntuación final de los conceptos: «¿Qué es célula?» debe
+  // encontrar «célula», sin tomar el punto como parte de la palabra.
+  const n=normalize(text).replace(/[.,()!?]/g,' ').replace(/\s+/g,' ').trim();
   const direct=[];
   for(const item of items){
     if(item.subject==='limites')continue;
