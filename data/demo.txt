@@ -1,0 +1,83 @@
+Usuario: Hola.
+Asistente: Hola. ¿En qué puedo ayudarte hoy?
+
+Usuario: ¿Qué es una inteligencia artificial?
+Asistente: Es un sistema computacional que aprende patrones de datos y puede generar predicciones o respuestas.
+
+Usuario: ¿Qué significa entrenar un modelo?
+Asistente: Ajustar sus parámetros usando ejemplos y una función de pérdida para mejorar resultados medibles.
+
+Usuario: ¿Qué es el código abierto?
+Asistente: Es una manera de compartir programas y permitir su uso, estudio, modificación y redistribución.
+
+Usuario: ¿Qué es una red neuronal?
+Asistente: Es una función matemática parametrizada que transforma entradas en salidas mediante capas.
+
+Usuario: ¿Qué es un transformer?
+Asistente: Es una arquitectura neuronal que utiliza mecanismos de atención para procesar secuencias.
+
+Usuario: ¿Qué es atención causal?
+Asistente: Es una atención que evita consultar posiciones futuras durante la predicción del siguiente token.
+
+Usuario: ¿Qué es un token?
+Asistente: Es una unidad de representación del texto. Puede representar bytes, caracteres o fragmentos de palabras.
+
+Usuario: ¿Qué es un parámetro?
+Asistente: Es un valor numérico ajustable del modelo, aprendido durante el entrenamiento.
+
+Usuario: ¿Qué es una pérdida?
+Asistente: Es una medida numérica del error que tratamos de reducir durante el aprendizaje.
+
+Usuario: ¿Qué es una evaluación?
+Asistente: Es una prueba de desempeño sobre datos separados de los utilizados para entrenar.
+
+Usuario: ¿Por qué usar datos de validación?
+Asistente: Para comprobar si el modelo se comporta razonablemente fuera de los ejemplos aprendidos.
+
+Usuario: ¿Qué es el sobreajuste?
+Asistente: Ocurre cuando el modelo memoriza ejemplos y no generaliza bien a casos nuevos.
+
+Usuario: ¿Qué es la transparencia?
+Asistente: Es explicar de dónde vienen los datos, qué código se ejecuta y qué limitaciones tiene el sistema.
+
+Usuario: ¿Qué es aprender desde cero?
+Asistente: Inicializar los pesos sin un modelo preentrenado y optimizarlos con datos de entrenamiento.
+
+Usuario: ¿Qué es el razonamiento?
+Asistente: Es un proceso para obtener conclusiones mediante relaciones lógicas, reglas o inferencias.
+
+Usuario: ¿Puede equivocarse una IA?
+Asistente: Sí. Una respuesta fluida no garantiza veracidad ni fiabilidad.
+
+Usuario: ¿Por qué medir la calidad?
+Asistente: Porque la utilidad real exige pruebas reproducibles, no solamente respuestas impresionantes.
+
+Usuario: ¿Qué es una licencia MIT?
+Asistente: Es una licencia permisiva que permite utilizar, modificar y distribuir código respetando sus avisos.
+
+Usuario: ¿Qué es una semilla aleatoria?
+Asistente: Es un valor que inicializa generadores seudoaleatorios y ayuda a repetir experimentos.
+
+Usuario: ¿Cuál es el siguiente token?
+Asistente: Es la continuación más probable o una muestra de la distribución estimada.
+
+Usuario: ¿Por qué entrenar con pruebas?
+Asistente: Porque los cambios técnicos deben demostrar que el programa sigue funcionando.
+
+Usuario: ¿Qué significa local?
+Asistente: Que una parte de la ejecución sucede en el propio dispositivo.
+
+Usuario: ¿Qué es un checkpoint?
+Asistente: Es un archivo que contiene el estado necesario para recuperar un modelo.
+
+Usuario: ¿Qué es una inferencia?
+Asistente: Es calcular una salida con parámetros ya entrenados.
+
+Usuario: ¿Qué es un conjunto de datos?
+Asistente: Es una colección de ejemplos utilizada para aprender, verificar o probar.
+
+Usuario: ¿Qué es una API?
+Asistente: Es una interfaz que permite conectar sistemas mediante llamadas definidas.
+
+Usuario: ¿Qué diferencia hay entre código y pesos?
+Asistente: El código define las operaciones; los pesos contienen números aprendidos.
