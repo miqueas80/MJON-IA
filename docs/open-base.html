@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#080d16">
+  <meta name="description" content="MJON Open-Base: laboratorio de conversación local con pesos abiertos Qwen, separado de MJON Original.">
+  <title>MJON Open-Base · Aula universitaria</title>
+  <link rel="stylesheet" href="./web/style.css">
+  <link rel="stylesheet" href="./web/open-base.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><span class="logo" aria-hidden="true">M</span><div><h1>MJON IA</h1><p class="sub">División Open-Base · laboratorio de modelos abiertos</p></div></div>
+    <nav class="links" aria-label="Navegación">
+      <a href="./">MJON Original ↗</a>
+      <a href="https://github.com/miqueas80/MJON-IA">Código ↗</a>
+    </nav>
+  </header>
+  <section class="intro">
+    <span class="eyebrow">AULA UNIVERSITARIA · EJECUCIÓN LOCAL OPCIONAL</span>
+    <h2>MJON Open-Base<br>Masterclass experimental</h2>
+    <p>Conversá con un modelo abierto ya preentrenado, ejecutado en tu dispositivo mediante WebGPU. Es una <strong>variante basada en Qwen</strong>, no el Transformer MJON entrenado desde cero ni una transferencia completa de sus conocimientos.</p>
+  </section>
+  <main class="main">
+    <section class="panel" aria-label="Conversación con modelo abierto">
+      <div class="panel-head"><strong>Aula universitaria · Qwen 0,5B</strong><span class="status" id="status" role="status" aria-live="polite">Sin iniciar</span></div>
+      <div class="messages" id="messages" role="log" aria-live="polite"></div>
+      <div class="examples" id="examples">
+        <button type="button" data-prompt="Explicá la fotosíntesis para alguien de secundaria y cómo se relaciona con la energía.">Biología</button>
+        <button type="button" data-prompt="Resolvé paso a paso la ecuación 2x + 3 = 11 y verificá el resultado.">Matemática</button>
+        <button type="button" data-prompt="Compará átomos y moléculas usando dos ejemplos cotidianos.">Química</button>
+        <button type="button" data-prompt="Explicá qué es un algoritmo y escribí pseudocódigo para ordenar tres números.">Programación</button>
+        <button type="button" data-prompt="¿Cómo identificarías un error lógico en una explicación científica?">Pensamiento crítico</button>
+      </div>
+      <form id="chat-form" class="chat-form">
+        <input id="prompt" aria-label="Pregunta al modelo" placeholder="Cargá el modelo antes de conversar…" maxlength="1200" autocomplete="off" required disabled>
+        <button id="send" type="submit" disabled>Preguntar</button>
+      </form>
+      <p class="fine">Las respuestas pueden contener errores. No uses esta demostración para decisiones importantes ni ingreses datos privados. Toda la inferencia ocurre en tu dispositivo una vez descargado el modelo.</p>
+    </section>
+    <aside class="panel side" aria-label="Configuración y control del modelo">
+      <div>
+        <span class="tag">PESOS ABIERTOS · SIN API DE PAGO</span>
+        <h3 class="aside-heading">Iniciar modelo</h3>
+        <p><strong>Profesor base:</strong> Qwen2.5-0.5B-Instruct, conversión ONNX de onnx-community. Licencia de pesos: Apache 2.0.</p>
+        <label class="slide" for="precision">Cuantización</label>
+        <select id="precision"><option value="q4f16" selected>q4f16 · menor descarga (~483 MB)</option><option value="q4">q4 · mayor compatibilidad (~786 MB)</option></select>
+        <p id="compat" class="hint">Comprobando WebGPU…</p>
+        <div class="buttons open-actions"><button id="load" type="button">Descargar y ejecutar</button><button id="cancel" type="button" disabled>Cancelar / liberar</button></div>
+        <p id="download" class="hint" role="status" aria-live="polite">No se descarga nada hasta pulsar el botón.</p>
+      </div>
+      <div class="split">
+        <h3>Evaluación humana</h3>
+        <p>Probá preguntas nuevas, verificá la respuesta y evaluá su utilidad. Esto registra observaciones, no las convierte en pruebas de inteligencia.</p>
+        <div class="buttons"><button id="good" type="button" disabled>Útil</button><button id="bad" type="button" disabled>Incorrecta</button></div>
+        <div class="buttons"><button id="export" type="button" disabled>Exportar resultados JSON</button><button id="clear" type="button">Limpiar</button></div>
+        <p id="scores" class="hint">0 respuestas evaluadas.</p>
+      </div>
+      <div class="split">
+        <h3>Privacidad y recursos</h3>
+        <p>WebGPU requerido. Primera descarga: aproximadamente 0,5–0,8 GB más archivos auxiliares. El navegador puede conservar pesos en caché, sujeto a espacio y políticas de almacenamiento. No se garantiza uso sin conexión hasta comprobarlo en tu equipo.</p>
+        <p id="storage" class="hint">Almacenamiento sin comprobar.</p>
+      </div>
+      <div class="warning">MJON Original continúa siendo un modelo propio desde cero. Open-Base es una rama <em>de capacidades</em> derivada explícitamente de Qwen, pero ambas conviven en el mismo repositorio y en la misma rama Git <code>main</code>. No son la misma IA.</div>
+      <p class="hint">Fuente: <a href="https://huggingface.co/onnx-community/Qwen2.5-0.5B-Instruct">modelo ONNX</a> · <a href="https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct">modelo original</a> · <a href="https://github.com/miqueas80/MJON-IA/blob/main/docs/OPEN_BASE.md">protocolo MJON</a>.</p>
+    </aside>
+  </main>
+  <footer class="foot">MJON Open-Base · Preentrenamiento de terceros identificado · Inferencia local, descarga optativa · Sin API comercial · <a href="./">Volver a MJON Original</a></footer>
+</div>
+<script type="module" src="./web/open-base.mjs"></script>
+</body>
+</html>

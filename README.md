@@ -138,3 +138,11 @@ El script crea 42 preguntas para enseñar y 6 preguntas de conceptos reservados,
 No se incorpora una dependencia en tiempo de ejecución: la inferencia de v0.8 ocurre **sin internet**, como los anteriores modelos. El acceso a Internet sí es necesario **en el entrenamiento** para descargar el profesor. El proyecto no atribuye automáticamente licencia CC0 a las respuestas generadas por Qwen; el código original sigue bajo MIT y los avisos sobre el modelo externo están documentados.
 
 [Diseño, reproducibilidad y licencias](docs/DISTILLATION_V08.md).
+
+## MJON Universidad · Open-Base (experiencia conversacional derivada)
+
+Además de MJON Original, hay un aula independiente en **[Open-Base](https://miqueas80.github.io/MJON-IA/open-base.html)**. Ejecuta localmente un modelo preentrenado de unos 500 millones de parámetros de Qwen mediante Transformers.js + WebGPU. **No es MJON Original ni representa una transferencia completa de conocimientos**; se identifica claramente la procedencia Apache 2.0 del modelo y se conservan las versiones nativas sin cambios.
+
+La descarga inicial de los pesos cuantizados es optativa y grande (aprox. 483 MB–786 MB más auxiliares); requiere Internet y WebGPU. El navegador puede conservar parte de los recursos en caché, pero no se promete una experiencia 100% offline. Los mensajes no se envían a servicios de inferencia; los cálculos se realizan en el dispositivo después de la carga. El aula incluye evaluaciones humanas exportables, sin calificación automática inventada.
+
+[Protocolo, licencias, requisitos y limitaciones](docs/OPEN_BASE.md).

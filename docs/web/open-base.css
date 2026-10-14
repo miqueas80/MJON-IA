@@ -1,0 +1,13 @@
+.hint{font-size:11px!important;color:#a9bbd4!important;margin-top:10px!important}
+.hint a{color:#a7cdfd}.aside-heading{margin-top:14px!important}
+.open-actions{margin-top:12px}.open-actions button{min-height:38px}
+#load{background:#285f50;color:#e0fff0;border-color:#438f78}
+#load:disabled{opacity:.35}
+#compat[data-ok=true]{color:#7adab4!important}
+#compat[data-ok=false]{color:#ffadb1!important}
+#download{overflow-wrap:anywhere}
+#scores{font-variant-numeric:tabular-nums}
+#good{border-color:#488b71}
+#bad{border-color:#986b6b}
+.side strong{color:#ecf4ff}
+.side .warning code{color:#e6d9ff}
