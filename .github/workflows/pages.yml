@@ -1,0 +1,57 @@
+name: Publicar MJON IA en GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/pages.yml'
+      - 'docs/**'
+      - 'src/**'
+      - 'scripts/**'
+      - 'pyproject.toml'
+      - 'data/demo.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Instalar PyTorch CPU
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -e . --no-deps
+      - name: Ejecutar pruebas de regresión
+        run: python -m unittest discover -s tests -v
+      - name: Entrenar modelo propio de demostración
+        run: |
+          python -m mjon_ia.train --steps 800 --eval-every 200 --context 48 --d-model 16 --layers 1 --heads 2 --batch-size 16 --lr 0.001 --dropout 0 --device cpu --out checkpoints/browser.pt
+      - name: Exportar pesos a navegador
+        run: python scripts/export_web.py --checkpoint checkpoints/browser.pt --out docs/web/weights.txt
+      - name: Configurar Pages
+        uses: actions/configure-pages@v5
+      - name: Preparar contenido estático
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./docs
+      - name: Publicar Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

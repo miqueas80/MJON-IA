@@ -24,3 +24,17 @@ Requiere Python 3.10+ y PyTorch 2.2+. El entrenamiento crea los pesos en `checkp
 Se trabaja en **main**, por partes y con pruebas antes de cada commit. Ante un fallo, usar `git revert <sha>` para conservar el historial.
 
 Código bajo licencia **MIT**. El objetivo de apertura incluye código, pesos entrenados y documentación de datos/licencias cuando estén preparados para publicación. Por ahora el repositorio es privado, de modo que el código todavía no está publicado. MJON IA no depende de ningún proyecto anterior.
+
+
+## Probar la IA en GitHub Pages
+
+La interfaz web pública usa **el Transformer real entrenado desde cero**; los
+pesos se generan en GitHub Actions y se publican como archivos estáticos.
+La inferencia usa JavaScript local, no Python en el servidor.
+
+Guía paso a paso: [docs/GITHUB_PAGES.md](docs/GITHUB_PAGES.md).
+Tras activar **Settings > Pages > GitHub Actions**, el sitio esperado es
+https://miqueas80.github.io/MJON-IA/ .
+
+El navegador ejecuta un modelo más pequeño (8.176 parámetros) que el
+entrenamiento de CLI. Es un experimento de tokens, no un asistente fiable.
