@@ -65,3 +65,9 @@ Se construyen dos pesos **independientes**, no dos nombres para el mismo checkpo
 En el panel lateral elegí el modelo. La página descargará los pesos en ese momento y verificará su SHA-256. El entrenamiento ocurre solo en el ejecutor de GitHub Actions. Ambos modelos tienen resultados rudimentarios, no equivalen a asistentes funcionales; debido a las distintas particiones, sus pérdidas de validación tampoco son directamente comparables.
 
 El workflow verifica el manifiesto y prueba inferencia real de ambos modelos en JavaScript antes de publicar.
+
+## MJON IA v0.3: tercer perfil
+
+La compilación también genera un corpus sintético CC0 con 1800 diálogos y entrena desde cero otro Transformer (aprox. 505.920 parámetros, vocabulario BPE de 512 unidades, 96 tokens de contexto, 500 pasos). La web descarga esos pesos en formato int8 y los ejecuta en el navegador con un cache KV causal. Los modelos anteriores permanecen como opciones.
+
+El entrenamiento de este perfil es un experimento computacional, no una garantía de conversaciones coherentes. Las métricas solo comparan una parte pequeña de datos sintéticos; no miden razonamiento general. GitHub Pages sirve archivos estáticos: el entrenamiento se ejecuta en GitHub Actions.

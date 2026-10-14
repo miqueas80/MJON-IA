@@ -50,3 +50,19 @@ Ahora se puede guardar y reanudar el optimizador y estado aleatorio, medir la va
 La web permite alternar entre dos **modelos entrenados por separado**: perfil v0.1 (8.176 parámetros, contexto de 48 bytes) y perfil v0.2 (36.736 parámetros, contexto de 96 bytes). El flujo de GitHub Actions los entrena desde cero, genera pesos cuantizados y construye `docs/web/models.json`. El navegador descarga y ejecuta localmente el modelo seleccionado: no se conecta a una API de terceros para generar texto.
 
 Estas dos variantes usan un dataset minúsculo; **ninguna mantiene una conversación fiable**. Cambiar de versión no sustituye la necesidad de datasets amplios y evaluación. Los pesos no se guardan en `main`: se incluyen en el despliegue de Pages.
+
+## MJON IA v0.3: BPE propio + 505.920 parámetros
+
+Nueva variante entrenada desde pesos aleatorios, tokenizador **byte-level BPE** aprendido únicamente del corpus de entrenamiento, contexto de 96 tokens, gradientes acumulados, checkpoints reanudables y validación separada. Se construye automáticamente desde un corpus sintético propio (CC0). El motor JavaScript tiene **caché de claves/valores** para generar tokens sin repetir innecesariamente la inferencia completa.
+
+Este progreso es **de ingeniería y entrenamiento experimental**, no demuestra razonamiento ni capacidad conversacional general. Los modelos v0.1 y v0.2 siguen disponibles en el selector de GitHub Pages. La construcción se verifica con pruebas de Python y JS; el entrenamiento depende del workflow de GitHub Actions.
+
+Comandos v0.3:
+
+```bash
+python -m mjon_ia.synthetic --output data/synthetic_es.txt --examples 1800
+python -m mjon_ia.train_v03 --data data/synthetic_es.txt --steps 500 --out checkpoints/mjon-v03.pt --context 96
+python -m mjon_ia.generate_v03 --checkpoint checkpoints/mjon-v03.pt --prompt "Usuario: Hola\nAsistente:"
+```
+
+Los pesos descargables se publican como parte del sitio web; los checkpoints del optimizador no se suben al repositorio. El objetivo es ampliar después el corpus con materiales de procedencia y licencia verificables.

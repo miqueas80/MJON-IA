@@ -15,6 +15,9 @@ for(const item of catalog.models){
   const model=new MJONTransformer(state);
   assert.equal(model.cfg.context,item.context);
   assert.equal(model.steps,item.steps);
+  const phrase='Córdoba, español y 🧪';
+  assert.equal(model.codec.decode(model.codec.encode(phrase)),phrase,'Tokenizer debe ser reversible');
+  if(item.id==='v03')assert.ok(model.cfg.vocab_size>256 && model.codec.merges.length>0);
   const logits=model.logits([...new TextEncoder().encode('Hola')]);
   assert.equal(logits.length,256);
   assert.ok([...logits].every(Number.isFinite));

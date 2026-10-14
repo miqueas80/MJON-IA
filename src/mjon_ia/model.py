@@ -20,8 +20,10 @@ class ModelConfig:
             raise ValueError("Las dimensiones deben ser positivas y context >= 2")
         if self.d_model % self.heads:
             raise ValueError("d_model debe ser divisible por heads")
-        if self.vocab_size != 256:
-            raise ValueError("El tokenizer de este prototipo requiere vocab_size=256")
+        if not 256 <= self.vocab_size <= 65535:
+            raise ValueError("vocab_size debe estar entre 256 y 65535")
+        if not 0 <= self.dropout < 1:
+            raise ValueError("dropout debe estar entre 0 y 1")
 
     def to_dict(self):
         return asdict(self)

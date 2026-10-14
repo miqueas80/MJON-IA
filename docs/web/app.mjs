@@ -52,7 +52,7 @@ async function loadModel(id){
       throw new Error('Los pesos no corresponden con el catálogo publicado');
     model=candidate;
     const number=new Intl.NumberFormat('es-AR').format(selected.parameters);
-    $('model-info').textContent=`${number} parámetros · ${selected.context} bytes de contexto · ${selected.steps} pasos · ${selected.split_mode==='bytes'?'partición por bytes':'partición de diálogos'}`;
+    $('model-info').textContent=`${number} parámetros · ${selected.context} ${selected.tokenizer==='bpe'?'tokens BPE':'bytes'} de contexto · ${selected.steps} pasos · ${selected.split_mode==='bytes'?'partición por bytes':'partición de diálogos'}`;
     $('model-description').textContent=selected.description;
     $('last-run').textContent='—';
     messages.replaceChildren();clear();

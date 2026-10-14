@@ -44,6 +44,15 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Entrenar y exportar v0.1 y v0.2
         run: python scripts/build_web_models.py
+      - name: Crear corpus sintético propio para v0.3
+        run: python -m mjon_ia.synthetic --output data/synthetic_es.txt --examples 1800 --seed 42
+      - name: Entrenar tercer modelo con BPE propio (500K)
+        run: |
+          python -m mjon_ia.train_v03 --data data/synthetic_es.txt --out checkpoints/web/v03.pt --steps 500 --eval-every 100 --save-every 100 --context 96 --vocab-size 512 --d-model 96 --layers 4 --heads 4 --batch-size 4 --grad-accum 2 --lr 0.0006 --dropout 0 --device cpu --cpu-threads 2
+      - name: Publicar pesos del tercer modelo
+        run: |
+          python scripts/export_web.py --checkpoint checkpoints/web/v03.pt --out docs/web/weights-v03.txt
+          python scripts/catalog_v03.py --checkpoint checkpoints/web/v03.pt --weights docs/web/weights-v03.txt --catalog docs/web/models.json
       - name: Verificar catálogo y archivos de pesos
         run: python scripts/verify_web_models.py
       - name: Verificar inferencia JavaScript en ambas versiones
