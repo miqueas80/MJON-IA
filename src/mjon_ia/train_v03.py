@@ -11,13 +11,14 @@ from .model import ByteTransformer,ModelConfig
 from .tokenizer import ByteBPETokenizer
 
 
-def prepare_data(path,seed,vocab_size):
+def prepare_data(path,seed,vocab_size,tokenizer_chars=None):
     content=Path(path).read_bytes()
     digest=hashlib.sha256(content).hexdigest()
     train_raw,val_raw=split_dialogues(content.decode('utf-8'),seed=seed)
     training=bytes(train_raw.tolist()).decode('utf-8')
     validation=bytes(val_raw.tolist()).decode('utf-8')
-    tokenizer=ByteBPETokenizer.train(training,vocab_size=vocab_size)
+    sample=training[:tokenizer_chars] if tokenizer_chars else training
+    tokenizer=ByteBPETokenizer.train(sample,vocab_size=vocab_size)
     train_ids=torch.tensor(tokenizer.encode(training),dtype=torch.long)
     val_ids=torch.tensor(tokenizer.encode(validation),dtype=torch.long)
     return digest,tokenizer,train_ids,val_ids
@@ -52,7 +53,10 @@ def run(args):
     if args.lr<=0:raise ValueError('lr debe ser positivo')
     random.seed(args.seed);torch.manual_seed(args.seed);torch.set_num_threads(args.cpu_threads)
     device=('cuda' if torch.cuda.is_available() else 'cpu') if args.device=='auto' else args.device
-    digest,tok,training,validation=prepare_data(args.data,args.seed,args.vocab_size)
+    sample_size=getattr(args,'tokenizer_chars',None)
+    if sample_size is not None and sample_size < 2000:
+        raise ValueError('--tokenizer-chars debe ser al menos 2000')
+    digest,tok,training,validation=prepare_data(args.data,args.seed,args.vocab_size,sample_size)
     cfg=ModelConfig(vocab_size=tok.vocab_size,context=args.context,d_model=args.d_model,
                     layers=args.layers,heads=args.heads,dropout=args.dropout)
     if min(len(training),len(validation))<=cfg.context:
@@ -61,6 +65,8 @@ def run(args):
     optimizer=torch.optim.AdamW(model.parameters(),lr=args.lr,weight_decay=.1)
     first=0;history=[]
     settings={'lr':args.lr,'batch_size':args.batch_size,'grad_accum':args.grad_accum}
+    if sample_size is not None:
+        settings['tokenizer_chars']=sample_size
     if args.resume:
         saved=torch.load(args.resume,map_location='cpu',weights_only=True)
         if saved.get('version')!=3:raise ValueError('Se requiere checkpoint MJON IA v0.3')
@@ -123,6 +129,7 @@ def parse_args():
     p.add_argument('--save-every',type=int,default=100)
     p.add_argument('--context',type=int,default=128)
     p.add_argument('--vocab-size',type=int,default=512)
+    p.add_argument('--tokenizer-chars',type=int,default=None,help='Entrenar BPE solo con este prefijo de entrenamiento, nunca validación')
     p.add_argument('--d-model',type=int,default=96)
     p.add_argument('--layers',type=int,default=4)
     p.add_argument('--heads',type=int,default=4)

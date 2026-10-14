@@ -13,3 +13,6 @@ checkpoints/
 docs/web/models.json
 docs/web/weights-*.txt
 data/synthetic_es.txt
+data/corpus_v04.txt
+data/benchmark_v04.json
+docs/web/benchmarks.json

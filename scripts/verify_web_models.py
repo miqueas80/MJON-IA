@@ -10,7 +10,7 @@ from pathlib import Path
 def verify(location="docs/web"):
     directory = Path(location)
     catalog = json.loads((directory / "models.json").read_text(encoding="utf-8"))
-    assert catalog["format"] == "mjonia.models.v1" and len(catalog["models"]) >= 2
+    assert catalog["format"] == "mjonia.models.v1" and len(catalog["models"]) >= 4
     seen = set()
     for entry in catalog["models"]:
         assert entry["id"] not in seen

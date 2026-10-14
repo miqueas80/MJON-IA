@@ -3,7 +3,7 @@ import {decodeWeights, MJONTransformer} from './runtime.mjs';
 const $ = id => document.getElementById(id);
 const form=$('chat-form'), input=$('prompt'), messages=$('messages');
 const status=$('status'),send=$('send'),stop=$('stop'),reset=$('reset'),selector=$('model-select');
-let model=null, models=[], busy=false, abort=false, serial=0;
+let model=null, models=[], benchmark=null, busy=false, abort=false, serial=0;
 
 function setStatus(value,kind=''){status.textContent=value;status.dataset.kind=kind;}
 function bubble(role,text){
@@ -54,6 +54,9 @@ async function loadModel(id){
     const number=new Intl.NumberFormat('es-AR').format(selected.parameters);
     $('model-info').textContent=`${number} parámetros · ${selected.context} ${selected.tokenizer==='bpe'?'tokens BPE':'bytes'} de contexto · ${selected.steps} pasos · ${selected.split_mode==='bytes'?'partición por bytes':'partición de diálogos'}`;
     $('model-description').textContent=selected.description;
+    const metric=benchmark?.results?.find(x=>x.model===selected.id);
+    const result=$('benchmark-info');
+    if(result)result.textContent=metric?`MJON Bench (fuera de plantilla): ${metric.greedy_exact_count}/${metric.evaluated_numeric_probes} respuestas numéricas correctas; ${metric.pairwise_count}/${metric.evaluated_numeric_probes} preferencias acertadas. No mide comprensión general.`:'Este modelo no tiene una evaluación de generalización publicada.';
     $('last-run').textContent='—';
     messages.replaceChildren();clear();
     setStatus('Modelo cargado · listo','ready');
@@ -101,7 +104,10 @@ async function init(){
       throw new Error('Catálogo de modelos inválido');
     models=catalog.models;
     enableModelSelection(models);
-    await loadModel(models[0].id);
+    try { const scores=await fetch('./web/benchmarks.json',{cache:'no-cache'}); if(scores.ok) benchmark=await scores.json(); } catch (_) { /* evaluación opcional */ }
+    const selected=models[models.length-1].id;
+    selector.value=selected;
+    await loadModel(selected);
   }catch(error){setStatus('Error al iniciar','error');bubble('system','No se pudo inicializar MJON IA: '+error.message+'. Revisá GitHub Actions.');}
 }
 init();

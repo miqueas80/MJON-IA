@@ -66,3 +66,19 @@ python -m mjon_ia.generate_v03 --checkpoint checkpoints/mjon-v03.pt --prompt "Us
 ```
 
 Los pesos descargables se publican como parte del sitio web; los checkpoints del optimizador no se suben al repositorio. El objetivo es ampliar después el corpus con materiales de procedencia y licencia verificables.
+
+## MJON IA v0.4 · Corpus Forge + MJON Bench
+
+Esta etapa agrega un cuarto modelo Transformer entrenado desde cero de **1.271.808 parámetros** (d=128, 6 capas, 4 cabezas, contexto de 128 tokens BPE y vocabulario objetivo 512). El corpus sintético CC0 tiene 5.000 diálogos generados de manera determinista a partir de tareas de lenguaje, aritmética, conceptos y estructuras en español. Los archivos derivados se crean en GitHub Actions: el generador y las reglas están en el código fuente.
+
+**Evaluación independiente:** MJON Bench presenta preguntas numéricas redactadas fuera de las plantillas y con números ajenos al rango de entrenamiento. El resultado real se publica en `docs/web/benchmarks.json` y se muestra en el sitio para v0.3/v0.4; las puntuaciones bajas son resultados válidos. No se presenta la validación como garantía de razonamiento ni de calidad conversacional.
+
+El tokenizador se entrena **solo** con un prefijo de la partición de entrenamiento (nunca validación). El entrenamiento conserva checkpoints reanudables y los tres modelos anteriores. El teléfono ejecuta inferencia local en el navegador, mientras la construcción entrena el modelo en GitHub Actions.
+
+```bash
+python -m mjon_ia.corpus_forge --examples 5000
+python -m mjon_ia.train_v03 --data data/corpus_v04.txt --out checkpoints/v04.pt --steps 1000 --context 128 --vocab-size 512 --tokenizer-chars 80000 --d-model 128 --layers 6 --heads 4 --batch-size 4 --grad-accum 2 --device cpu
+python scripts/evaluate_v04.py --checkpoints checkpoints/v04.pt --benchmark data/benchmark_v04.json
+```
+
+La investigación sigue siendo experimental. No hay API externa obligatoria ni promesas de equivalencia con un LLM comercial.

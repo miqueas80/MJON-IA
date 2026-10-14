@@ -17,3 +17,13 @@
 - Entrenamiento: corpus sintético generado y documentado (licencia CC0), muestras separadas por diálogo, 500 pasos de demostración; checkpoint reanudable disponible durante entrenamiento.
 - Inferencia: PyTorch en CLI y JavaScript cuantizado int8 con KV cache en GitHub Pages.
 - Limitación crítica: el corpus es limitado y repetitivo. El modelo no tiene razonamiento general ni garantías de veracidad.
+
+## Variante v0.4: Corpus Forge + MJON Bench
+
+- **Parámetros:** 1.271.808, pesos aleatorios al comenzar.
+- **Arquitectura:** Transformer causal, 6 capas, d=128, 4 cabezas, contexto 128 tokens.
+- **Tokenizador:** BPE UTF-8 propio de hasta 512 tokens, entrenado en un prefijo del conjunto de entrenamiento; sin fuga deliberada de validación.
+- **Corpus:** 5000 diálogos originales generados por reglas y semillas documentadas, licencia CC0. Incluye tareas repetitivas de aritmética y conocimientos muy básicos; no es una colección de textos humanos.
+- **Entrenamiento:** 1000 pasos, lotes 4 × gradientes acumulados 2, CPU de GitHub Actions.
+- **Benchmark:** preguntas sintéticas fuera de plantilla, tasas de respuesta numérica exacta y preferencia correcta frente a un distractor. Reportes de v0.3 y v0.4 en `docs/web/benchmarks.json` tras cada despliegue.
+- **Advertencias:** no mide inteligencia general, puede memorizar plantillas o generar errores y no tiene alineamiento instructivo avanzado. Los resultados en pruebas se publican tal como son, sin promesas de mejora.
