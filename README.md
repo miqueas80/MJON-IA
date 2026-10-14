@@ -198,3 +198,11 @@ El examen visible en `docs/web/knowledge-v11.json` compara las respuestas genera
 **Sin módulo Graphify en la web, sin RAG externo, sin otro motor, sin backend**. La aplicación JS sigue cargando solo pesos cuantizados del Transformer MJON, y el repositorio continúa trabajando en `main`. El grafo se usa como fuente de datos de entrenamiento, no como respuesta preprogramada.
 
 Esta mejora no implica comprensión universal ni introduce arquitecturas GNN: convierte relaciones verificables del código en señales de entrenamiento neuronal. [Metodología, licencia y límites](docs/GRAPHIFY_V12.md).
+
+## MJON Neural Core · evolución escalable sin IA externa
+
+La v1.1 mostró una limitación clara: **0 de 70 paráfrasis correctas** pese al entrenamiento. No la equiparamos a un modelo chino de frontera. Agregamos una arquitectura propia moderna con RoPE, RMSNorm, SwiGLU, atención agrupada y caché KV; entrenamiento desde cero mediante SentencePiece, optimización con CUDA BF16/FP16, acumulación de gradientes, separación de corpus por documento y selección de checkpoints.
+
+**No es una segunda aplicación ni un modelo chino oculto.** Es código de la próxima etapa neuronal de MJON, sin reemplazar el modelo publicado hasta que supere las pruebas y tenga pesos realmente entrenados. Ver [arquitectura, comandos y límites](docs/NEURAL_CORE.md). La CI rápida [`neural-smoke.yml`](.github/workflows/neural-smoke.yml) hace pruebas de gradientes, atención causal, caché y aprendizaje CPU sin descargar modelos de terceros.
+
+También se corrigió la ruta del JSON generado por Graphify: las 183 entidades y 631 enlaces se habían extraído correctamente, pero la tarea de GitHub buscaba el archivo en un directorio incorrecto.

@@ -47,3 +47,7 @@ graphify-out/
 data/graphify_v12/
 docs/web/graphify-v12.json
 docs/web/graphify-manifest-v12.json
+
+# Modelos grandes de investigación: nunca subir checkpoints ni corpus privados
+checkpoints/neural/
+data/neural_corpus/

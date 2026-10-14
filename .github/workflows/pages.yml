@@ -164,10 +164,10 @@ jobs:
         run: |
           python -m pip install "graphifyy==0.9.90" --quiet
           graphify extract src/mjon_ia --code-only --no-cluster --out graphify-out/v12
-          test -s graphify-out/v12/graph.json
+          test -s graphify-out/v12/graphify-out/graph.json
       - name: Convertir aristas Graphify verificadas en clases neuronales
         run: |
-          python scripts/graphify_curriculum_v12.py --source graphify-out/v12/graph.json --out data/graphify_v12 --seed 1212
+          python scripts/graphify_curriculum_v12.py --source graphify-out/v12/graphify-out/graph.json --out data/graphify_v12 --seed 1212
           cp data/graphify_v12/manifest.json docs/web/graphify-manifest-v12.json
       - name: Entrenar los pesos del Transformer MJON v1.2 con grafo
         run: |
