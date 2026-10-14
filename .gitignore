@@ -19,3 +19,7 @@ docs/web/benchmarks.json
 
 data/instruction_v05/
 docs/web/firstwords.json
+
+# Corpus v0.6 y benchmark regenerables
+data/memory_v06/
+docs/web/memory.json

@@ -96,3 +96,17 @@ python -m mjon_ia.instruction_v05 --out data/instruction_v05
 python -m mjon_ia.finetune_v05 --base checkpoints/web/v04.pt --out checkpoints/web/v05.pt
 python scripts/benchmark_v05.py --base checkpoints/web/v04.pt --tuned checkpoints/web/v05.pt
 ```
+
+## MJON IA v0.6 — memoria contextual y correcciones
+
+El mismo Transformer propio de **1.271.808 parámetros** se ajusta desde v0.5 con diálogos sintéticos que presentan un dato y luego preguntan por él, o registran una corrección y preguntan por el valor vigente. El corpus está documentado en `data/MEMORY_V06.md`. Se mezclan ejemplos de repaso de v0.5 para reducir el olvido. Sigue siendo entrenamiento supervisado (SFT), no una base de datos externa ni un sistema general de razonamiento.
+
+**MJON Memory Bench** compara v0.5 y v0.6 con 48 pruebas equilibradas de recuerdo y corrección sobre objetos no incluidos en el ajuste; también mide la retención en el benchmark anterior de 48 extracciones. Las puntuaciones reales se incluyen en `docs/web/memory.json` durante el despliegue de GitHub Pages. Los errores permanecen visibles.
+
+En la web, v0.6 conserva **hasta tres pares de mensajes temporalmente en memoria RAM**, y los incorpora al siguiente prompt. No se guardan entre recargas, no hay reconocimiento fiable de intenciones y no se prometen conversaciones generales. Se preservan v0.1–v0.5 en el mismo selector.
+
+```bash
+python -m mjon_ia.memory_v06 --out data/memory_v06
+python -m mjon_ia.finetune_v06 --base checkpoints/web/v05.pt --out checkpoints/web/v06.pt
+python scripts/benchmark_v06.py --base checkpoints/web/v05.pt --tuned checkpoints/web/v06.pt
+```

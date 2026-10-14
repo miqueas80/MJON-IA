@@ -75,3 +75,7 @@ El entrenamiento de este perfil es un experimento computacional, no una garantí
 ## Nueva v0.5: primeras palabras
 
 Tras entrenar v0.4, GitHub Actions lo usa como base para un ajuste supervisado de 900 pasos en tareas de lectura de atributos explícitos (color, material y estado). Publica el peso separado `weights-v05.txt` y un informe `firstwords.json` con evaluación libre frente al modelo v0.4 sobre los mismos ejemplos reservados. El navegador ofrece un modo de respuesta breve determinista para v0.5. No hay respuestas programadas en la web; el texto lo genera el Transformer.
+
+## v0.6 — Recuerdos y correcciones
+
+Tras construir v0.5, Actions genera un corpus sintético con turnos previos y correcciones, ajusta el propio modelo desde los pesos v0.5 y exporta `weights-v06.txt`. Se publica también `memory.json`, con resultados de 48 casos de recuerdo y corrección separados de entrenamiento, comparación v0.5/v0.6 y retención de la tarea anterior. En la web, las últimas tres parejas de mensajes se mantienen solo durante la sesión actual; la inferencia continúa en el dispositivo.

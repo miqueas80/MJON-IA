@@ -14,14 +14,14 @@
    <div class="brand"><span class="logo" aria-hidden="true">M</span><div><h1>MJON IA</h1><p class="sub">Inteligencia artificial · código abierto</p></div></div>
    <nav class="links" aria-label="Enlaces"><a href="https://github.com/miqueas80/MJON-IA">Código fuente ↗</a><a href="https://github.com/miqueas80/MJON-IA/blob/main/docs/MODEL_CARD.md">Ficha técnica ↗</a></nav>
   </header>
-  <section class="intro"><span class="eyebrow">EXPERIMENTO PÚBLICO · 5 MODELOS · CÓDIGO ABIERTO</span><h2>Una IA propia.<br>Un modelo desde cero.</h2><p>Compará cinco variantes del Transformer entrenadas desde cero por MJON IA, incluida la v0.5 con entrenamiento supervisado de respuestas cortas y evaluación en objetos no vistos. La inferencia funciona directamente en tu dispositivo sin servidores de IA, ChatGPT ni Gemini.</p></section>
+  <section class="intro"><span class="eyebrow">EXPERIMENTO PÚBLICO · 6 MODELOS · CÓDIGO ABIERTO</span><h2>Una IA propia.<br>Un modelo desde cero.</h2><p>Compará seis versiones del Transformer propio de MJON IA. La v0.6 intenta recordar datos de turnos anteriores y responder después de una corrección. La inferencia funciona directamente en tu dispositivo sin servidores de IA, ChatGPT ni Gemini.</p></section>
   <main class="main">
    <section class="panel" aria-label="Laboratorio conversacional">
     <div class="panel-head"><strong>Laboratorio de generación</strong><span class="status" id="status" role="status" aria-live="polite">Cargando…</span></div>
     <div class="messages" id="messages" role="log" aria-live="polite"></div>
     <div class="examples" id="examples"><button type="button" data-prompt="Hola.">Hola</button><button type="button" data-prompt="¿Qué es una inteligencia artificial?">¿Qué es una IA?</button><button type="button" data-prompt="¿Qué es aprender?">¿Qué es aprender?</button></div>
     <form class="chat-form" id="chat-form"><input id="prompt" aria-label="Mensaje" placeholder="Escribí para probar el modelo…" maxlength="500" autocomplete="off" required><button id="send" type="submit" disabled>Enviar</button></form>
-    <p class="fine">Hasta 1.271.808 parámetros. Es un experimento de generación de tokens: las respuestas no son fiables ni implican comprensión del lenguaje.</p>
+    <p class="fine">Hasta 1.271.808 parámetros. Experimento de lenguaje: las respuestas no son fiables. En v0.6, los tres últimos intercambios se conservan solo en memoria temporal del navegador; no es memoria persistente.</p>
    </section>
    <aside class="panel side" aria-label="Panel de diagnóstico">
     <div><span class="tag">LOCAL · SIN API</span><h3 style="margin-top:13px">Elegí una versión</h3><label class="slide" for="model-select">Modelo entrenado</label><select id="model-select" aria-label="Seleccionar versión de MJON IA" disabled><option>Cargando versiones…</option></select><p id="model-description" style="margin-top:11px">Los modelos se entrenan desde cero durante la publicación.</p><p id="model-info" style="margin-top:9px">Preparando modelo…</p><p id="benchmark-info" style="margin-top:9px">Esperando datos del benchmark…</p></div>
@@ -31,7 +31,7 @@
     <div class="warning">Esta demostración <strong>no es un asistente conversacional</strong>. Utiliza un corpus mínimo sintético; el texto puede ser incoherente. No ingreses datos sensibles.</div>
    </aside>
   </main>
-  <footer class="foot">MJON IA · Modelos experimentales v0.1 / v0.2 / v0.3 / v0.4 / v0.5 · Código MIT · Dataset de demostración CC0 · <a href="https://github.com/miqueas80/MJON-IA">Repositorio de código</a> · Alojamiento estático GitHub Pages</footer>
+  <footer class="foot">MJON IA · Modelos experimentales v0.1 / v0.2 / v0.3 / v0.4 / v0.5 / v0.6 · Código MIT · Dataset de demostración CC0 · <a href="https://github.com/miqueas80/MJON-IA">Repositorio de código</a> · Alojamiento estático GitHub Pages</footer>
  </div>
  <script type="module" src="./web/app.mjs"></script>
 </body>

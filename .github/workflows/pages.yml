@@ -75,9 +75,21 @@ jobs:
           python scripts/catalog_v05.py --checkpoint checkpoints/web/v05.pt --weights docs/web/weights-v05.txt --catalog docs/web/models.json
       - name: Evaluar generación libre contra v0.4
         run: python scripts/benchmark_v05.py --base checkpoints/web/v04.pt --tuned checkpoints/web/v05.pt --holdout data/instruction_v05/holdout.json --out docs/web/firstwords.json --limit 48
+      - name: Crear corpus de memoria v0.6 con objetos reservados
+        run: python -m mjon_ia.memory_v06 --out data/memory_v06 --seed 606 --limit 2500
+      - name: Ajustar v0.6 desde v0.5 y conservar habilidades anteriores
+        run: |
+          python -m mjon_ia.finetune_v06 --base checkpoints/web/v05.pt --train data/memory_v06/train.json --holdout data/memory_v06/holdout.json --replay data/instruction_v05/train.json --out checkpoints/web/v06.pt --steps 900 --eval-every 150 --save-every 150 --batch-size 8 --lr 0.0002 --replay-fraction 0.2 --cpu-threads 2
+      - name: Exportar y catalogar pesos v0.6
+        run: |
+          python scripts/export_web.py --checkpoint checkpoints/web/v06.pt --out docs/web/weights-v06.txt
+          python scripts/catalog_v06.py --checkpoint checkpoints/web/v06.pt --weights docs/web/weights-v06.txt --catalog docs/web/models.json
+      - name: Evaluar memoria, correcciones y retención v0.5
+        run: |
+          python scripts/benchmark_v06.py --base checkpoints/web/v05.pt --tuned checkpoints/web/v06.pt --holdout data/memory_v06/holdout.json --firstwords data/instruction_v05/holdout.json --out docs/web/memory.json --per-group 8
       - name: Verificar catálogo y archivos de pesos
         run: python scripts/verify_web_models.py
-      - name: Verificar inferencia JavaScript en las cinco versiones
+      - name: Verificar inferencia JavaScript en las seis versiones
         run: node scripts/verify_browser.mjs
       - name: Configurar Pages
         uses: actions/configure-pages@v5

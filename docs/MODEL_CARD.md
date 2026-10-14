@@ -36,3 +36,11 @@
 - **Evaluación:** 102 ejemplos con nombres de objetos que no aparecen en los ejemplos SFT; selección determinista de 48 para el benchmark web.
 - **Métrica:** porcentaje de respuestas generadas libremente que coinciden con la etiqueta esperada, sin elegir entre candidatos predefinidos.
 - **Limitación:** aprender a extraer una etiqueta no equivale a razonar, conocer el mundo ni dialogar de manera general. Los resultados de v0.4/v0.5 son comparables solo dentro de esta misma prueba.
+
+## Variante v0.6 — Memoria contextual de corto alcance
+
+- **Base:** pesos de MJON IA v0.5 (1.271.808 parámetros), sin LLM ajeno.
+- **Entrenamiento:** SFT sobre diálogos sintéticos con turnos previos, cambios de atributo y acuses de recibo; repaso de ejemplos v0.5.
+- **Evaluación:** 48 casos equilibrados de recuerdo/corrección con seis nombres reservados en entrenamiento; comparación directa v0.5/v0.6, más retención de 48 preguntas de v0.5.
+- **Inferencia web:** historial temporal de hasta tres intercambios enviado únicamente al propio modelo ejecutado en JavaScript en el navegador. No persiste al recargar.
+- **Advertencias:** las plantillas del corpus son conocidas y la memoria está limitada por una ventana de 128 tokens BPE. La evaluación no representa diálogo libre, memoria duradera ni razonamiento general.
