@@ -23,7 +23,7 @@ Requiere Python 3.10+ y PyTorch 2.2+. El entrenamiento crea los pesos en `checkp
 ## Política de desarrollo
 Se trabaja en **main**, por partes y con pruebas antes de cada commit. Ante un fallo, usar `git revert <sha>` para conservar el historial.
 
-Código bajo licencia **MIT**. El objetivo de apertura incluye código, pesos entrenados y documentación de datos/licencias cuando estén preparados para publicación. Por ahora el repositorio es privado, de modo que el código todavía no está publicado. MJON IA no depende de ningún proyecto anterior.
+Código bajo licencia **MIT**. El objetivo de apertura incluye código, pesos entrenados y documentación de datos/licencias cuando estén preparados para publicación. El repositorio es público; los pesos experimentales de la web se generan durante el despliegue. MJON IA no depende de ningún proyecto anterior.
 
 
 ## Probar la IA en GitHub Pages
@@ -38,3 +38,9 @@ https://miqueas80.github.io/MJON-IA/ .
 
 El navegador ejecuta un modelo más pequeño (8.176 parámetros) que el
 entrenamiento de CLI. Es un experimento de tokens, no un asistente fiable.
+
+## Entrenamiento v0.2
+
+Ahora se puede guardar y reanudar el optimizador y estado aleatorio, medir la validación de forma estable y separar diálogos por bloque para reducir filtración de ejemplos literales entre entrenamiento y validación. **La calidad del chat web no aumenta automáticamente.**
+
+[Instrucciones de entrenamiento v0.2](docs/TRAINING_V02.md).

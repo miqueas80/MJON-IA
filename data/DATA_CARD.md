@@ -7,6 +7,6 @@
 - **Limitaciones:** insuficiente para entrenar un asistente útil, seguro o imparcial.
 - **Datos personales:** ninguno introducido deliberadamente.
 - **Licencia:** CC0-1.0 en la medida permitida por ley.
-- **Preparación:** partición contigua 90/10 por bytes para la demostración, no adecuada para entrenamiento real a escala.
+- **Preparación:** partición 90/10 de bloques separados por líneas en blanco, con deduplicación exacta y semilla fija (v0.2). La opción `--split-mode bytes` conserva la partición anterior; no es adecuada para evaluar generalización.
 
 Para datasets reales, registrar procedencia, autorización de uso, deduplicación y segmentación por documento.
