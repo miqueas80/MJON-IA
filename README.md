@@ -4,7 +4,7 @@ Proyecto independiente de inteligencia artificial de código abierto en desarrol
 
 **Estado:** investigación experimental, no es un asistente conversacional fiable.
 
-## Inicio rápido (una vez incorporado el núcleo)
+## Inicio rápido
 ```bash
 python -m pip install -e .
 python -m mjon_ia.train --steps 15 --eval-every 5 --context 32 --d-model 48 --layers 2 --heads 2 --batch-size 4 --device cpu
