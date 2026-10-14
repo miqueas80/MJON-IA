@@ -87,3 +87,7 @@ El workflow conserva v0.1–v0.6, crea 4.800 ejercicios sintéticos CC0 con `sch
 ## v0.8 — Alumno con profesor abierto
 
 El pipeline descarga `Qwen/Qwen2.5-0.5B-Instruct` únicamente **durante el build**, genera respuestas en español, registra el commit de la revisión del maestro, ajusta MJON v0.7 y exporta un octavo checkpoint cuantizado. El navegador **no descarga Qwen**, solo los pesos pequeños del alumno. Se publican `teacher-v08.json` y `distillation.json`, más referencias de licencia. Los siete modelos anteriores permanecen elegibles.
+
+## MJON v0.9 — Conocimiento incorporado mediante entrenamiento
+
+Actions usa Qwen solo como docente para generar respuestas, con atribución, y entrena el Transformer MJON v0.8 para generar v0.9. El sitio estático ofrece únicamente los pesos cuantizados del alumno; **no importa Transformers.js ni ejecuta Qwen**, y no contiene ningún selector de modelos externos. `teacher-v09.json` registra la procedencia del material docente y `distillation-v09.json` muestra la comparación en preguntas reservadas. No hay segundo módulo ni aplicación adicional.

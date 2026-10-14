@@ -1,17 +1,10 @@
 import {decodeWeights, MJONTransformer} from './runtime.mjs';
-import {InheritedEngine} from './inherited.mjs';
 
 const $ = id => document.getElementById(id);
 const form=$('chat-form'), input=$('prompt'), messages=$('messages');
 const status=$('status'),send=$('send'),stop=$('stop'),reset=$('reset'),selector=$('model-select');
-let model=null, models=[], benchmark=null, firstwords=null, memoryScores=null, schoolScores=null, distillScores=null, busy=false, abort=false, serial=0;
+let model=null, models=[], benchmark=null, firstwords=null, memoryScores=null, schoolScores=null, distillScores=null, distillScoresV09=null, busy=false, abort=false, serial=0;
 let session=[];
-const inherited=new InheritedEngine({onProgress:p=>{
-  const value=Number.isFinite(p?.progress)?' · '+Math.floor(p.progress)+'%':'';
-  $('inherited-status').textContent=(p?.status||'Descargando')+(p?.file?' · '+p.file.split('/').pop():'')+value;
-}});
-const inheritedMode=()=>selector.value==='inherited';
-const canRespond=()=>Boolean(model)||(inheritedMode()&&inherited.ready);
 
 function setStatus(value,kind=''){status.textContent=value;status.dataset.kind=kind;}
 function bubble(role,text){
@@ -23,7 +16,7 @@ function bubble(role,text){
   return content;
 }
 function setBusy(value){
-  busy=value;send.disabled=value||!canRespond();stop.disabled=!value;
+  busy=value;send.disabled=value||!model;stop.disabled=!value;
   input.disabled=value;selector.disabled=value;
 }
 function clear(){
@@ -43,28 +36,7 @@ function enableModelSelection(items){
 async function loadModel(id){
   if(busy)return;
   const selected=models.find(entry=>entry.id===id);
-  if(!selected && id!=='inherited')throw new Error('Versión inexistente');
-  if(id==='inherited'){
-    ++serial;
-    model=null;session=[];
-    messages.replaceChildren();clear();
-    $('inherited-controls').hidden=false;
-    $('inherited-load').disabled=inherited.ready;
-    $('inherited-release').disabled=!inherited.worker;
-    $('model-info').textContent='~500 millones de parámetros · Qwen preentrenado · WebGPU, descarga bajo demanda';
-    $('model-description').textContent='Cerebro heredado de Qwen2.5-0.5B-Instruct (Apache 2.0). Variante derivada dentro de MJON, no los pesos originales de 1,3 M.';
-    $('benchmark-info').textContent='Los resultados de MJON Original no se atribuyen a este modelo preentrenado.';
-    setStatus(inherited.ready?'Cerebro heredado cargado':'Activación opcional · sin descargar',inherited.ready?'ready':'');
-    send.disabled=!inherited.ready;selector.disabled=false;
-    const supported=await InheritedEngine.compatible();
-    $('inherited-status').textContent=supported?
-      'WebGPU detectado. Elegí el formato y activá la descarga manualmente.':
-      'WebGPU no disponible en este navegador. MJON Original sigue funcionando.';
-    $('inherited-load').disabled=!supported||inherited.ready;
-    return;
-  }
-  $('inherited-controls').hidden=true;
-  if(inherited.worker)inherited.release();
+  if(!selected)throw new Error('Versión inexistente');
   const request=++serial;
   model=null;selector.disabled=true;send.disabled=true;
   setStatus('Cargando '+selected.label+'…');
@@ -85,7 +57,7 @@ async function loadModel(id){
     $('model-info').textContent=`${number} parámetros · ${selected.context} ${selected.tokenizer==='bpe'?'tokens BPE':'bytes'} de contexto · ${selected.steps} pasos · ${selected.split_mode==='bytes'?'partición por bytes':'partición de diálogos'}`;
     $('model-description').textContent=selected.description;
     session=[];
-    const distill=distillScores?.models?.find(x=>x.model===selected.id);
+    const distill=selected.id==='v09'?distillScoresV09?.models?.find(x=>x.model===selected.id):distillScores?.models?.find(x=>x.model===selected.id);
     const school=schoolScores?.models?.find(x=>x.checkpoint===selected.id);
     const schoolBefore=schoolScores?.models?.find(x=>x.checkpoint==='v06');
     const memory=memoryScores?.models?.find(x=>x.checkpoint===selected.id);
@@ -95,14 +67,14 @@ async function loadModel(id){
     const first=firstwords?.models?.find(x=>x.checkpoint===selected.id);
     const baseline=firstwords?.models?.find(x=>x.checkpoint==='v04');
     if(result) result.textContent=distill?
-      `MJON Destilación: profesor ${distillScores.teacher}; pérdida en conceptos reservados ${distill.teacher_holdout_loss}. Examen escolar: ${distill.school_holdout.correct}/${distill.school_holdout.total}; transferencias: ${distill.school_transfer.correct}/${distill.school_transfer.total}. El profesor y el alumno pueden equivocarse; no son el mismo modelo.`:
+      `MJON Destilación: profesor ${(selected.id==='v09'?distillScoresV09:distillScores).teacher}; pérdida en conceptos reservados ${distill.teacher_holdout_loss}. Examen escolar: ${distill.school_holdout.correct}/${distill.school_holdout.total}; transferencias: ${distill.school_transfer.correct}/${distill.school_transfer.total}. El profesor y el alumno pueden equivocarse; no son el mismo modelo.`:
       school?
       `MJON Examen: ${school.holdout.correct}/${school.holdout.total} con entidades nuevas; ${school.transfer.correct}/${school.transfer.total} con preguntas reformuladas. Repaso: ${school.previous_memory.correct}/${school.previous_memory.total} de memoria y ${school.previous_short.correct}/${school.previous_short.total} de respuestas breves. Referencia v0.6: ${schoolBefore?.holdout.correct??'?'}/${schoolBefore?.holdout.total??'?'}. Los errores se publican.`:
       memory?`MJON Memory: ${memory.correct}/${memory.total} aciertos; recordar ${memory.by_case.recall.correct}/${memory.by_case.recall.total}, corregir ${memory.by_case.correction.correct}/${memory.by_case.correction.total}. v0.5: ${priorMemory?.correct??'?'}/${priorMemory?.total??'?'}. Retención de tarea anterior: ${memoryScores.retention.after.correct}/${memoryScores.retention.after.total}.`:first?`MJON First Words: ${first.exact}/${first.total} extracciones correctas; v0.4 sin ajuste: ${baseline?.exact??'?'}/${baseline?.total??'?'}. No implica razonamiento general.`:
       metric?`MJON Bench: ${metric.greedy_exact_count}/${metric.evaluated_numeric_probes} respuestas numéricas correctas, ${metric.pairwise_count}/${metric.evaluated_numeric_probes} preferencias acertadas.`:
       'Este modelo no tiene benchmark publicado.';
     const examples=$('examples');examples.replaceChildren();
-    const prompts=selected.id==='v08'?
+    const prompts=['v08','v09'].includes(selected.id)?
       ['¿Qué es una célula?','¿Para qué sirve una variable en programación?','¿Qué es una fracción?','¿Qué significa código abierto?']:
       selected.id==='v07'?
       ['En una caja hay 12 fichas. Entran 5 fichas y salen 3. ¿Cuántas hay?',
@@ -126,42 +98,11 @@ async function loadModel(id){
     setStatus('No se pudo cargar','error');
     bubble('system','Error al cargar '+selected.label+': '+error.message);
   }finally{
-    if(request===serial){send.disabled=!canRespond();selector.disabled=false;}
+    if(request===serial){send.disabled=!model;selector.disabled=false;}
   }
 }
 reset.addEventListener('click',clear);
-stop.addEventListener('click',()=>{
-  abort=true;stop.disabled=true;
-  if(inheritedMode()){
-    inherited.release();setBusy(false);
-    $('inherited-load').disabled=false;$('inherited-release').disabled=true;
-    $('inherited-status').textContent='Generación cancelada. Cerebro liberado de memoria.';
-    setStatus('Cerebro detenido');
-  }
-});
-$('inherited-load').addEventListener('click',async()=>{
-  if(busy||!inheritedMode())return;
-  $('inherited-load').disabled=true;$('inherited-release').disabled=false;
-  setBusy(true);setStatus('Descargando cerebro heredado…','working');
-  try{
-    await inherited.load($('inherited-precision').value);
-    $('inherited-status').textContent='Cerebro heredado activo. Generación local.';
-    setStatus('Inteligencia heredada activa','ready');
-  }catch(error){
-    $('inherited-status').textContent='Error: '+error.message;
-    setStatus('No se pudo activar','error');
-  }finally{
-    setBusy(false);
-    $('inherited-load').disabled=inherited.ready;
-    $('inherited-release').disabled=!inherited.worker;
-  }
-});
-$('inherited-release').addEventListener('click',()=>{
-  inherited.release();$('inherited-load').disabled=false;
-  $('inherited-release').disabled=true;
-  $('inherited-status').textContent='Cerebro liberado de memoria. La caché puede conservar los archivos.';
-  setStatus('Cerebro liberado');setBusy(false);
-});
+stop.addEventListener('click',()=>{abort=true;stop.disabled=true});
 selector.addEventListener('change',()=>{if(!busy)loadModel(selector.value)});
 $('examples').addEventListener('click',e=>{
   const button=e.target.closest('button[data-prompt]');
@@ -169,26 +110,25 @@ $('examples').addEventListener('click',e=>{
 });
 $('temperature').addEventListener('input',e=>{$('temp-value').textContent=Number(e.target.value).toFixed(2)});
 form.addEventListener('submit',async e=>{
-  e.preventDefault();if(!canRespond()||busy)return;
+  e.preventDefault();if(!model||busy)return;
   const question=input.value.trim();if(!question)return;
   bubble('user',question);input.value='';
   const answer=bubble('assistant','Generando…');abort=false;setBusy(true);
   setStatus('Generando en tu dispositivo','working');const start=performance.now();
   try{
-    const history=['v06','v07','v08'].includes(selector.value)
+    const history=['v06','v07','v08','v09'].includes(selector.value)
      ?session.map(turn=>`Usuario: ${turn.question}\nAsistente: ${turn.answer}\n`).join('')
      :'';
-   const result=inheritedMode()?await inherited.generate(question,session):await model.generate(`${history}Usuario: ${question}\nAsistente:`,{
-      count:['v05','v06','v07','v08'].includes(selector.value)?24:Number($('count').value),
-      temperature:['v05','v06','v07','v08'].includes(selector.value)?1:Number($('temperature').value),
-      topK:['v05','v06','v07','v08'].includes(selector.value)?1:24,
-      stopAtNewline:['v05','v06','v07','v08'].includes(selector.value),
+   const result=await model.generate(`${history}Usuario: ${question}\nAsistente:`,{
+      count:['v05','v06','v07','v08','v09'].includes(selector.value)?24:Number($('count').value),
+      temperature:['v05','v06','v07','v08','v09'].includes(selector.value)?1:Number($('temperature').value),
+      topK:['v05','v06','v07','v08','v09'].includes(selector.value)?1:24,
+      stopAtNewline:['v05','v06','v07','v08','v09'].includes(selector.value),
       shouldStop:()=>abort,
       onToken:s=>{answer.textContent=s||'…';messages.scrollTop=messages.scrollHeight;}
     });
     answer.textContent=result||'(Sin texto)';
-    if(inheritedMode())session=[...session,{question,answer:result}].slice(-3);
-    if(['v06','v07','v08'].includes(selector.value))session=[...session,{question,answer:result}].slice(-3);
+    if(['v06','v07','v08','v09'].includes(selector.value))session=[...session,{question,answer:result}].slice(-3);
     $('last-run').textContent=`${((performance.now()-start)/1000).toFixed(1)} s · ${new TextEncoder().encode(result).length} bytes`;
     setStatus(abort?'Detenido':'Modelo listo','ready');
   }catch(error){answer.textContent='Error: '+error.message;setStatus('Error','error');}
@@ -209,10 +149,10 @@ async function init(){
     try { const scores=await fetch('./web/memory.json',{cache:'no-cache'}); if(scores.ok) memoryScores=await scores.json(); } catch (_) { /* evaluación opcional */ }
     try { const scores=await fetch('./web/school.json',{cache:'no-cache'}); if(scores.ok) schoolScores=await scores.json(); } catch (_) { /* evaluación opcional */ }
     try { const scores=await fetch('./web/distillation.json',{cache:'no-cache'}); if(scores.ok) distillScores=await scores.json(); } catch (_) { /* evaluación opcional */ }
-    const option=document.createElement('option');
-    option.value='inherited';option.textContent='MJON IA · Cerebro heredado (Qwen 0.5B)';selector.append(option);
-    selector.value='inherited';
-    await loadModel('inherited');
+    try { const scores=await fetch('./web/distillation-v09.json',{cache:'no-cache'}); if(scores.ok) distillScoresV09=await scores.json(); } catch (_) { /* evaluación opcional */ }
+    const selected=models[models.length-1].id;
+    selector.value=selected;
+    await loadModel(selected);
   }catch(error){setStatus('Error al iniciar','error');bubble('system','No se pudo inicializar MJON IA: '+error.message+'. Revisá GitHub Actions.');}
 }
 init();

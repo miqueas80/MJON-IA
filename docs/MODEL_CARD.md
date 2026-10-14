@@ -61,3 +61,12 @@
 - **Corpus:** preguntas originales controladas, respuestas generadas en CI con la revisión exacta del maestro y publicadas con procedencia. Las respuestas deben revisarse antes de reutilizarse como contenidos educativos avalados.
 - **Límites:** con 1,3M de parámetros el alumno no reproduce la capacidad del maestro de ~500M; mayor similitud con el maestro no demuestra razonamiento ni veracidad.
 - **Benchmark:** pérdida de respuesta para conceptos reservados + exactitud escolar con problemas y formulaciones no presentes en la muestra del maestro. Registra resultados antes/después y no garantiza mejora.
+
+## v0.9 — Destilación ampliada en el modelo original MJON
+
+- **Arquitectura del alumno:** exactamente la de MJON v0.8 (~1,29 millones de parámetros, contexto 256, BPE propio); se modifican sus pesos entrenables, no se añade arquitectura ni backend.
+- **Modelo maestro exclusivamente de entrenamiento:** Qwen2.5-0.5B-Instruct, Apache 2.0, con revisión y procedencia registradas. No se publica ni se carga al ejecutar MJON IA.
+- **Datos docentes:** hasta 336 preguntas con ocho redacciones de 42 conceptos. Evaluación: 18 preguntas acerca de seis conceptos separados.
+- **Aprendizaje:** SFT sobre respuestas breves del maestro, alternado con repaso de tareas previas. Guarda el mejor checkpoint y el último por separado.
+- **Evaluación:** pérdida de respuesta en conceptos reservados, regresión escolar y transferencia sobre redacciones no entrenadas. El profesor puede equivocarse y las etiquetas no son un currículo humano revisado.
+- **Capacidad y límites:** no se transfiere de golpe la capacidad de un modelo de 500 millones de parámetros a otro de 1,3 millones; la mejora depende del entrenamiento y de exámenes independientes.

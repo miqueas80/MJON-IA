@@ -139,6 +139,18 @@ No se incorpora una dependencia en tiempo de ejecución: la inferencia de v0.8 o
 
 [Diseño, reproducibilidad y licencias](docs/DISTILLATION_V08.md).
 
-## Herencia neuronal: cerebro preentrenado integrado
+## v0.9 · Entrenar a MJON Original con más conocimiento del maestro abierto
 
-La **misma interfaz principal de MJON IA** ahora permite activar un cerebro heredado desde pesos preentrenados de Qwen2.5-0.5B-Instruct (Apache 2.0), descargados de forma voluntaria y ejecutados localmente con WebGPU. No hay una segunda aplicación o universidad. Elegir el cerebro heredado no reentrena automáticamente MJON Original: sigue identificado como variante derivada y el Transformer original continúa entrenándose mediante destilación de respuestas del maestro. [Arquitectura y limitaciones](docs/INHERITANCE.md).
+**No hay ningún segundo módulo de IA**, motor de inferencia Qwen ni «cerebro alternativo» en el sitio. Qwen2.5-0.5B-Instruct (pesos Apache 2.0) participa **solo en GitHub Actions como profesor**, creando ejemplos en español. Luego MJON IA Original, que conserva su Transformer y su tokenizador propios, **actualiza sus propios pesos mediante aprendizaje supervisado** y ejecuta todas sus respuestas sin Qwen.
+
+Esta ampliación prepara hasta **336 preguntas docentes** (42 conceptos originales con ocho formulaciones) y **18 ejemplos reservados** de seis conceptos distintos. Filtra respuestas demasiado largas para los 256 tokens de contexto y entrena el alumno a partir de v0.8 con repaso escolar y de memoria. El entrenamiento guarda el mejor checkpoint según pérdida de validación y repaso, y exporta sus pesos como v0.9 a la misma página de MJON IA. También compara v0.8 y v0.9 en un examen independiente de 40 preguntas escolares y 40 reformuladas. El resultado puede mejorar, empeorar o seguir siendo insuficiente: no se presuponen aciertos.
+
+**Límite técnico:** el profesor tiene cientos de millones de parámetros y MJON Original ~1,3 millones; no hay forma de copiar mágicamente toda su inteligencia. Un corpus con más ejemplos permite entrenar capacidades específicas, pero no garantiza conversación general ni razonar como Qwen. Los pesos, la atribución y los datos de enseñanza están documentados en [Entrenamiento v0.9](docs/DISTILLATION_V09.md).
+
+```bash
+python scripts/generate_teacher_v09.py --student-base checkpoints/web/v08.pt
+python -m mjon_ia.distill_v09 --base checkpoints/web/v08.pt --steps 700
+python scripts/benchmark_v09.py --before checkpoints/web/v08.pt --after checkpoints/web/v09.pt
+```
+
+Se conservan las versiones anteriores y se trabaja **únicamente en `main`**, con commits reversibles. No se descarga ningún modelo externo al usar MJON IA.

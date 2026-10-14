@@ -42,12 +42,10 @@ jobs:
           python -m pip install -e . --no-deps
       - name: Ejecutar pruebas de regresión
         run: python -m unittest discover -s tests -v
-      - name: Validar herencia neuronal en interfaz única
+      - name: Comprobar ausencia de módulos externos
         run: |
           node --check docs/web/app.mjs
-          node --check docs/web/inherited.mjs
-          node --check docs/web/inherited-worker.mjs
-          node scripts/verify_inherited.mjs
+          node scripts/verify_original_only.mjs
       - name: Entrenar y exportar v0.1 y v0.2
         run: python scripts/build_web_models.py
       - name: Crear corpus sintético propio para v0.3
@@ -127,9 +125,22 @@ jobs:
       - name: Medir conocimientos reservados y regresión escolar
         run: |
           python scripts/benchmark_v08.py --before checkpoints/web/v07.pt --after checkpoints/web/v08.pt --teacher data/teacher_v08.json --school-holdout data/school_v07/holdout.json --school-transfer data/school_v07/transfer.json --out docs/web/distillation.json --per-subject 10
+      - name: Generar 336 lecciones ampliadas del maestro Qwen para MJON Original
+        run: |
+          python scripts/generate_teacher_v09.py --student-base checkpoints/web/v08.pt --out data/teacher_v09.json --variants-per-concept 8 --holdout-variants 3 --batch-size 6 --max-new-tokens 40 --cpu-threads 2
+          cp data/teacher_v09.json docs/web/teacher-v09.json
+      - name: Enseñar a MJON Original v0.9 y seleccionar el mejor checkpoint
+        run: |
+          python -m mjon_ia.distill_v09 --base checkpoints/web/v08.pt --teacher data/teacher_v09.json --replay data/school_v07/train.json --memory data/memory_v06/train.json --out checkpoints/web/v09.pt --steps 700 --batch-size 6 --teacher-fraction 0.65 --memory-fraction 0.12 --lr 0.00008 --cpu-threads 2
+      - name: Publicar los pesos propios v0.9
+        run: |
+          python scripts/export_web.py --checkpoint checkpoints/web/v09.pt --out docs/web/weights-v09.txt
+          python scripts/catalog_v09.py --checkpoint checkpoints/web/v09.pt --weights docs/web/weights-v09.txt --catalog docs/web/models.json
+      - name: Comparar el aprendizaje de MJON original contra v0.8
+        run: python scripts/benchmark_v09.py --before checkpoints/web/v08.pt --after checkpoints/web/v09.pt --teacher data/teacher_v09.json --school-holdout data/school_v07/holdout.json --school-transfer data/school_v07/transfer.json --out docs/web/distillation-v09.json --per-subject 10
       - name: Verificar catálogo y archivos de pesos
         run: python scripts/verify_web_models.py
-      - name: Verificar inferencia JavaScript en las ocho versiones
+      - name: Verificar inferencia JavaScript en las nueve versiones
         run: node scripts/verify_browser.mjs
       - name: Configurar Pages
         uses: actions/configure-pages@v5
