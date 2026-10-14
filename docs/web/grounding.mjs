@@ -181,7 +181,7 @@ function findConcepts(text,items){
   return candidates.length?[candidates[0].item]:[];
 }
 function looksLikeRequest(n){
-  return /\b(que|cual|como|cuando|donde|por que|explica|defini|decime|dime|calcula|resuelve|quien|ejemplo|diferencia|sirve|significa)\b/.test(n);
+  return /\b(que|cual|cuales|cuanto|cuanta|cuantos|cuantas|como|cuando|donde|por que|explica|defini|decime|dime|calcula|resuelve|quien|ejemplo|diferencia|sirve|significa)\b/.test(n);
 }
 export function createMJONGroundedCore(document){
   if(document?.schema!=='mjonia.grounded.v1'||!Array.isArray(document.items)
