@@ -9,6 +9,7 @@ import math
 import torch
 from torch import nn
 from torch.nn import functional as F
+from torch.utils.checkpoint import checkpoint
 
 
 @dataclass(frozen=True)
@@ -46,7 +47,7 @@ class RMSNorm(nn.Module):
 
     def forward(self, x):
         norm = x.float().pow(2).mean(-1, keepdim=True)
-        return (x.float() * torch.rsqrt(norm + self.eps)).to(x.dtype) * self.weight
+        return (x.float() * torch.rsqrt(norm + self.eps)).to(x.dtype) * self.weight.to(x.dtype)
 
 
 def apply_rope(x, position, theta: float):
@@ -138,6 +139,7 @@ class MJONNeuralCore(nn.Module):
     def __init__(self, config: NeuralConfig):
         super().__init__()
         self.config = config
+        self.gradient_checkpointing = False
         self.token = nn.Embedding(config.vocab_size, config.width)
         self.layers = nn.ModuleList(NeuralBlock(config) for _ in range(config.layers))
         self.norm = RMSNorm(config.width)
@@ -156,19 +158,29 @@ class MJONNeuralCore(nn.Module):
         if tokens.dtype not in (torch.int32, torch.int64):
             raise ValueError("Los tokens deben ser enteros")
         cached = past_key_values
+        if self.training and self.gradient_checkpointing and (use_cache or cached is not None):
+            raise ValueError("Checkpointing de gradientes no admite KV cache durante entrenamiento")
         if cached is not None and len(cached) != len(self.layers):
             raise ValueError("Longitud de KV cache incompatible")
         offset = 0 if cached is None else cached[0][0].shape[2]
+        if cached is not None:
+            shape = (tokens.shape[0], self.config.kv_heads, offset,
+                     self.config.width // self.config.heads)
+            if any(k.shape != shape or v.shape != shape or k.device != tokens.device
+                   or v.device != tokens.device for k, v in cached):
+                raise ValueError("KV cache con dimensiones, longitudes o dispositivo incompatibles")
         if offset + tokens.shape[1] > self.config.context:
             raise ValueError("Se superó el contexto de MJON")
         x = self.token(tokens)
         next_cache = []
         for index, layer in enumerate(self.layers):
-            x, layer_cache = layer(
-                x,
-                past=None if cached is None else cached[index],
-                use_cache=use_cache,
-            )
+            if self.training and self.gradient_checkpointing:
+                # Bind this layer now: a closure over the loop variable would
+                # recompute the wrong block during backward.
+                x, layer_cache = checkpoint(layer, x, use_reentrant=False)
+            else:
+                x, layer_cache = layer(
+                    x, past=None if cached is None else cached[index], use_cache=use_cache)
             if use_cache:
                 next_cache.append(layer_cache)
         logits = self.output(self.norm(x))
@@ -176,6 +188,8 @@ class MJONNeuralCore(nn.Module):
         if targets is not None:
             if targets.shape != tokens.shape:
                 raise ValueError("targets y tokens deben compartir dimensiones")
+            if not (targets != -100).any():
+                raise ValueError("Batch sin tokens supervisados")
             loss = F.cross_entropy(
                 logits.float().reshape(-1,logits.shape[-1]),
                 targets.reshape(-1), ignore_index=-100,

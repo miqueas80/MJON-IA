@@ -128,10 +128,10 @@ def validation(model,tokens,context,device,precision="fp32",windows=8):
 
 
 def autocast_for(device,precision):
-    if device.type!="cuda" or precision=="fp32":
+    if precision=="fp32":
         return contextlib.nullcontext()
     dtype=torch.bfloat16 if precision=="bf16" else torch.float16
-    return torch.autocast(device_type="cuda",dtype=dtype)
+    return torch.autocast(device_type=device.type,dtype=dtype)
 
 
 def learning_rate(step,max_steps,base,warmup,min_factor=.1):
