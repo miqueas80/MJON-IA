@@ -99,3 +99,7 @@ El entrenamiento de v1.0 usa el corpus docente creado por v0.9, una copia congel
 ## v1.1 — Conocimiento propio
 
 El pipeline genera un dataset original de conceptos elementales con `python -m mjon_ia.knowledge_v11`, reentrena el mismo Transformer MJON desde v1.0 y verifica la retención. Exporta `weights-v11.txt` y `knowledge-v11.json`. El navegador no descarga Qwen ni incluye modelos externos: el material es absorbido únicamente en los pesos entrenados de MJON.
+
+## v1.2 — Graphify solo durante entrenamiento
+
+GitHub Actions instala Graphify temporalmente, extrae grafo AST del código de MJON sin IA externa (`--code-only`), genera un corpus supervisado reproducible de relaciones verificadas y continúa entrenando el mismo Transformer. Publica el checkpoint `weights-v12.txt`, el resultado del examen `graphify-v12.json` y una ficha de procedencia `graphify-manifest-v12.json`. Ningún paquete Graphify se instala en el navegador ni se consulta el grafo para generar respuestas.

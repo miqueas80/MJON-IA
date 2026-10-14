@@ -160,9 +160,28 @@ jobs:
       - name: Evaluar conocimientos aprendidos y preguntas nunca vistas
         run: |
           python scripts/benchmark_v11.py --before checkpoints/web/v10.pt --after checkpoints/web/v11.pt --paraphrase data/knowledge_v11/paraphrase.json --unknown data/knowledge_v11/unknown.json --school data/school_v07/holdout.json --transfer data/school_v07/transfer.json --memory data/memory_v06/holdout.json --out docs/web/knowledge-v11.json
+      - name: Graphify · mapear relaciones AST locales sin IA externa
+        run: |
+          python -m pip install "graphifyy==0.9.90" --quiet
+          graphify extract src/mjon_ia --code-only --no-cluster --out graphify-out/v12
+          test -s graphify-out/v12/graph.json
+      - name: Convertir aristas Graphify verificadas en clases neuronales
+        run: |
+          python scripts/graphify_curriculum_v12.py --source graphify-out/v12/graph.json --out data/graphify_v12 --seed 1212
+          cp data/graphify_v12/manifest.json docs/web/graphify-manifest-v12.json
+      - name: Entrenar los pesos del Transformer MJON v1.2 con grafo
+        run: |
+          python -m mjon_ia.graph_learn_v12 --base checkpoints/web/v11.pt --graph data/graphify_v12/train.json --graph-dev data/graphify_v12/dev.json --graph-test data/graphify_v12/test.json --graph-manifest data/graphify_v12/manifest.json --knowledge data/knowledge_v11/train.json --knowledge-dev data/knowledge_v11/paraphrase.json --school data/school_v07/train.json --memory data/memory_v06/train.json --school-holdout data/school_v07/holdout.json --school-transfer data/school_v07/transfer.json --memory-holdout data/memory_v06/holdout.json --out checkpoints/web/v12.pt --steps 360 --batch-size 6 --graph-fraction 0.35 --knowledge-fraction 0.35 --memory-fraction 0.12 --kd-weight 0.55 --lr 0.00006 --eval-every 60 --save-every 60 --cpu-threads 2
+      - name: Exportar MJON Original con relaciones aprendidas
+        run: |
+          python scripts/export_web.py --checkpoint checkpoints/web/v12.pt --out docs/web/weights-v12.txt
+          python scripts/catalog_v12.py --checkpoint checkpoints/web/v12.pt --weights docs/web/weights-v12.txt --catalog docs/web/models.json
+      - name: Examen final independiente Graphify sin acceso al grafo
+        run: |
+          python scripts/benchmark_v12.py --before checkpoints/web/v11.pt --after checkpoints/web/v12.pt --graph-test data/graphify_v12/test.json --school data/school_v07/holdout.json --transfer data/school_v07/transfer.json --memory data/memory_v06/holdout.json --out docs/web/graphify-v12.json
       - name: Verificar catálogo y archivos de pesos
         run: python scripts/verify_web_models.py
-      - name: Verificar inferencia JavaScript en las once versiones
+      - name: Verificar inferencia JavaScript en las doce versiones
         run: node scripts/verify_browser.mjs
       - name: Configurar Pages
         uses: actions/configure-pages@v5

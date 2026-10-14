@@ -3,7 +3,7 @@ import {decodeWeights, MJONTransformer} from './runtime.mjs';
 const $ = id => document.getElementById(id);
 const form=$('chat-form'), input=$('prompt'), messages=$('messages');
 const status=$('status'),send=$('send'),stop=$('stop'),reset=$('reset'),selector=$('model-select');
-let model=null, models=[], benchmark=null, firstwords=null, memoryScores=null, schoolScores=null, distillScores=null, distillScoresV09=null, continualScoresV10=null, knowledgeScoresV11=null, busy=false, abort=false, serial=0;
+let model=null, models=[], benchmark=null, firstwords=null, memoryScores=null, schoolScores=null, distillScores=null, distillScoresV09=null, continualScoresV10=null, knowledgeScoresV11=null, graphifyScoresV12=null, busy=false, abort=false, serial=0;
 let session=[];
 
 function setStatus(value,kind=''){status.textContent=value;status.dataset.kind=kind;}
@@ -57,6 +57,7 @@ async function loadModel(id){
     $('model-info').textContent=`${number} parámetros · ${selected.context} ${selected.tokenizer==='bpe'?'tokens BPE':'bytes'} de contexto · ${selected.steps} pasos · ${selected.split_mode==='bytes'?'partición por bytes':'partición de diálogos'}`;
     $('model-description').textContent=selected.description;
     session=[];
+    const graphify=selected.id==='v12'?graphifyScoresV12?.models?.find(x=>x.model==='v12'):null;
     const knowledge=selected.id==='v11'?knowledgeScoresV11?.models?.find(x=>x.model==='v11'):null;
     const continual=selected.id==='v10'?continualScoresV10?.models?.find(x=>x.model==='v10'):null;
     const distill=selected.id==='v09'?distillScoresV09?.models?.find(x=>x.model===selected.id):distillScores?.models?.find(x=>x.model===selected.id);
@@ -68,7 +69,9 @@ async function loadModel(id){
     const result=$('benchmark-info');
     const first=firstwords?.models?.find(x=>x.checkpoint===selected.id);
     const baseline=firstwords?.models?.find(x=>x.checkpoint==='v04');
-    if(result) result.textContent=knowledge?
+    if(result) result.textContent=graphify?
+      `MJON Graphify: ${graphify.graph_test.correct}/${graphify.graph_test.total} aristas nuevas detectadas; escuela ${graphify.school.correct}/${graphify.school.total}; reformulaciones ${graphify.transfer.correct}/${graphify.transfer.total}; memoria ${graphify.memory.correct}/${graphify.memory.total}. Paso elegido: ${graphifyScoresV12.selected_step}. Si fue 0, no mejoró sin regresiones. Las aristas aprendidas son relaciones de código, no toda la inteligencia general.`:
+      knowledge?
       `MJON v1.1: ${knowledge.taught_paraphrases.correct}/${knowledge.taught_paraphrases.total} paráfrasis, ${knowledge.unseen_concepts.correct}/${knowledge.unseen_concepts.total} conceptos no vistos, ${knowledge.school.correct}/${knowledge.school.total} escolares y ${knowledge.memory.correct}/${knowledge.memory.total} de memoria. Checkpoint elegido: paso ${knowledgeScoresV11.selected_step}.`:
       continual?
       `MJON v1.0: ${continual.school.correct}/${continual.school.total} escolares, ${continual.transfer.correct}/${continual.transfer.total} reformuladas y ${continual.memory.correct}/${continual.memory.total} de memoria. Checkpoint aceptado: paso ${continualScoresV10.selected_step}. Si es 0, se rechazaron todos los ajustes.`:
@@ -80,7 +83,9 @@ async function loadModel(id){
       metric?`MJON Bench: ${metric.greedy_exact_count}/${metric.evaluated_numeric_probes} respuestas numéricas correctas, ${metric.pairwise_count}/${metric.evaluated_numeric_probes} preferencias acertadas.`:
       'Este modelo no tiene benchmark publicado.';
     const examples=$('examples');examples.replaceChildren();
-    const prompts=selected.id==='v11'?
+    const prompts=selected.id==='v12'?
+      ['¿Qué significa átomo?','¿Qué es pensamiento crítico?','¿Qué es un algoritmo?','¿Qué función cumple la memoria RAM?']:
+      selected.id==='v11'?
       ['¿Qué significa célula?','Explicá brevemente correlación.','¿Qué significa código abierto?','¿Sabés el color de mi mochila?']:
       ['v08','v09','v10'].includes(selected.id)?
       ['¿Qué es una célula?','¿Para qué sirve una variable en programación?','¿Qué es una fracción?','¿Qué significa código abierto?']:
@@ -124,19 +129,19 @@ form.addEventListener('submit',async e=>{
   const answer=bubble('assistant','Generando…');abort=false;setBusy(true);
   setStatus('Generando en tu dispositivo','working');const start=performance.now();
   try{
-    const history=['v06','v07','v08','v09','v10','v11'].includes(selector.value)
+    const history=['v06','v07','v08','v09','v10','v11','v12'].includes(selector.value)
      ?session.map(turn=>`Usuario: ${turn.question}\nAsistente: ${turn.answer}\n`).join('')
      :'';
    const result=await model.generate(`${history}Usuario: ${question}\nAsistente:`,{
-      count:['v05','v06','v07','v08','v09','v10','v11'].includes(selector.value)?24:Number($('count').value),
-      temperature:['v05','v06','v07','v08','v09','v10','v11'].includes(selector.value)?1:Number($('temperature').value),
-      topK:['v05','v06','v07','v08','v09','v10','v11'].includes(selector.value)?1:24,
-      stopAtNewline:['v05','v06','v07','v08','v09','v10','v11'].includes(selector.value),
+      count:['v05','v06','v07','v08','v09','v10','v11','v12'].includes(selector.value)?24:Number($('count').value),
+      temperature:['v05','v06','v07','v08','v09','v10','v11','v12'].includes(selector.value)?1:Number($('temperature').value),
+      topK:['v05','v06','v07','v08','v09','v10','v11','v12'].includes(selector.value)?1:24,
+      stopAtNewline:['v05','v06','v07','v08','v09','v10','v11','v12'].includes(selector.value),
       shouldStop:()=>abort,
       onToken:s=>{answer.textContent=s||'…';messages.scrollTop=messages.scrollHeight;}
     });
     answer.textContent=result||'(Sin texto)';
-    if(['v06','v07','v08','v09','v10','v11'].includes(selector.value))session=[...session,{question,answer:result}].slice(-3);
+    if(['v06','v07','v08','v09','v10','v11','v12'].includes(selector.value))session=[...session,{question,answer:result}].slice(-3);
     $('last-run').textContent=`${((performance.now()-start)/1000).toFixed(1)} s · ${new TextEncoder().encode(result).length} bytes`;
     setStatus(abort?'Detenido':'Modelo listo','ready');
   }catch(error){answer.textContent='Error: '+error.message;setStatus('Error','error');}
@@ -160,6 +165,7 @@ async function init(){
     try { const scores=await fetch('./web/distillation-v09.json',{cache:'no-cache'}); if(scores.ok) distillScoresV09=await scores.json(); } catch (_) { /* evaluación opcional */ }
     try { const scores=await fetch('./web/continual-v10.json',{cache:'no-cache'}); if(scores.ok) continualScoresV10=await scores.json(); } catch (_) { /* evaluación opcional */ }
     try { const scores=await fetch('./web/knowledge-v11.json',{cache:'no-cache'}); if(scores.ok) knowledgeScoresV11=await scores.json(); } catch (_) { /* evaluación opcional */ }
+    try { const scores=await fetch('./web/graphify-v12.json',{cache:'no-cache'}); if(scores.ok) graphifyScoresV12=await scores.json(); } catch (_) { /* evaluación opcional */ }
     const selected=models[models.length-1].id;
     selector.value=selected;
     await loadModel(selected);

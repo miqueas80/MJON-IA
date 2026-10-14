@@ -184,3 +184,17 @@ El modelo sigue siendo el **Transformer MJON entrenado con sus propios pesos**, 
 El examen visible en `docs/web/knowledge-v11.json` compara las respuestas generadas por v1.0 y v1.1 e incluye los errores. La licencia CC0 cubre el texto original de esta versión; no se copian obras educativas ajenas.
 
 [Documentación, límites y metodología](docs/KNOWLEDGE_V11.md).
+
+## MJON Original v1.2 — Aprendizaje neuronal a partir de Graphify
+
+[Graphify](https://github.com/Graphify-Labs/graphify) **no es un LLM ni contiene «inteligencia» que pueda copiarse**: es una herramienta de análisis de código que construye grafos de conocimiento. En v1.2 se integra **únicamente durante el entrenamiento**.
+
+1. GitHub Actions instala de forma temporal el CLI `graphifyy==0.9.90` (licencia Apache 2.0, fuente Graphify-Labs/graphify) y extrae el grafo AST del código Python original de MJON, con `graphify extract ... --code-only`. No utiliza llaves de API ni servicios LLM.
+2. Un convertidor estricto selecciona relaciones `EXTRACTED` (por ejemplo, `calls`, `imports`, `contains`) y transforma enlaces reales y no registrados en ejercicios contrastivos y supervisados. Un negativo significa **«no registrado en el grafo»**, no que sea falso en el código real.
+3. Se enseña a **la misma red neuronal de MJON** (base v1.1) mediante gradientes de cross-entropy, mezclando ejemplos de relaciones, currículo de conocimiento anterior y tareas de memoria. Una copia congelada del propio MJON regulariza el olvido.
+4. El checkpoint solo se acepta si mejora la pérdida de relaciones reservadas sin disminuir aciertos de calibración escolar, transferencia o memoria, y sin empeorar notablemente las lecciones del currículo anterior. Si no mejora, se preservan los pesos iniciales.
+5. Un examen final mide si MJON responde sobre **aristas nuevas que no entrenó**, junto con sus pruebas escolares y de memoria.
+
+**Sin módulo Graphify en la web, sin RAG externo, sin otro motor, sin backend**. La aplicación JS sigue cargando solo pesos cuantizados del Transformer MJON, y el repositorio continúa trabajando en `main`. El grafo se usa como fuente de datos de entrenamiento, no como respuesta preprogramada.
+
+Esta mejora no implica comprensión universal ni introduce arquitecturas GNN: convierte relaciones verificables del código en señales de entrenamiento neuronal. [Metodología, licencia y límites](docs/GRAPHIFY_V12.md).

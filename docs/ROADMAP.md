@@ -22,3 +22,5 @@ El desempeño depende de cómputo, datos y evaluación. No se promete equiparar 
 12. **v1.0 / antiolvido y aprendizaje continuo:** proteger habilidades con repaso y distilación funcional, promoción por desempeño y exámenes separados. No añadir módulos externos.
 
 13. **v1.1 / primer conocimiento fundamental redactado:** 120 conceptos en diez áreas con respuestas originales, 360 muestras de entrenamiento, 70 paráfrasis de examen, 40 preguntas de conceptos nuevos, repaso y promoción antiolvido.
+
+14. **v1.2 / relaciones Graphify a neuronas MJON:** grafo AST determinista en CI, relaciones EXTRACTED a ejemplos de entrenamiento propios, contraste de enlaces no registrados, retención y examen de aristas reservadas. Sin nuevo motor en el navegador.

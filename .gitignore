@@ -41,3 +41,9 @@ docs/web/continual-v10.json
 
 data/knowledge_v11/
 docs/web/knowledge-v11.json
+
+# Graphify: índice de código y corpus reconstruibles solo durante el build
+graphify-out/
+data/graphify_v12/
+docs/web/graphify-v12.json
+docs/web/graphify-manifest-v12.json

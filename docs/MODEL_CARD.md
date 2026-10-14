@@ -88,3 +88,11 @@
 - Separación: 30 paráfrasis de calibración, 70 paráfrasis de examen y 36 consultas de conceptos nuevos; examen escolar y memoria independientes.
 - Publicación: solo se acepta checkpoint que reduzca pérdida en calibración de conocimiento y no retroceda en aciertos previos de calibración.
 - Advertencia: una definición recordada no prueba comprensión ni razonamiento general; ningún contenido histórico, científico o escolar está avalado automáticamente para evaluación académica.
+
+## v1.2 — Supervisión de relaciones Graphify
+
+- **Estudiante:** mismo Transformer MJON con tokenizer y arquitectura propios; checkpoint v1.1 como base.
+- **Origen estructural:** `Graphify-Labs/graphify` / `graphifyy==0.9.90` (Apache-2.0), usado en GitHub Actions únicamente para análisis AST local.
+- **Entrenamiento:** pares pregunta-respuesta derivados de aristas `EXTRACTED` del grafo de código, positivos y negativos de ausencia de registro. Pérdida supervisada sobre tokens de respuesta; mezcla de currículo, memoria y escuela.
+- **Evaluación independiente:** aristas de prueba no utilizadas para gradientes ni selección, repaso escolar y memoria; progreso rechazado ante regresión de calibración.
+- **Limitación:** no hay nueva red neuronal gráfica, «conocimiento universal» ni acceso al grafo en la inferencia. No se pueden convertir aristas de código en capacidades generales por sí solas.
