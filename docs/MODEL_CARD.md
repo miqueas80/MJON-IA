@@ -70,3 +70,12 @@
 - **Aprendizaje:** SFT sobre respuestas breves del maestro, alternado con repaso de tareas previas. Guarda el mejor checkpoint y el último por separado.
 - **Evaluación:** pérdida de respuesta en conceptos reservados, regresión escolar y transferencia sobre redacciones no entrenadas. El profesor puede equivocarse y las etiquetas no son un currículo humano revisado.
 - **Capacidad y límites:** no se transfiere de golpe la capacidad de un modelo de 500 millones de parámetros a otro de 1,3 millones; la mejora depende del entrenamiento y de exámenes independientes.
+
+## v1.0 — protección contra el olvido
+
+- Arquitectura: sin cambios frente a v0.8, aprox. 1,29 millones de parámetros, 256 tokens y BPE propio.
+- Docencia: Qwen abierto únicamente durante la generación de material de entrenamiento.
+- Técnica: repaso de competencias antiguas más destilación funcional de logits entre el propio MJON congelado v0.8 y el alumno actualizado.
+- Calibración: cuatro preguntas escolares por materia después de las primeras diez reservadas al examen final; ocho de memoria.
+- Publicación: un checkpoint solo se acepta si mejora la pérdida docente y no reduce aciertos en las categorías de calibración. En caso contrario se retienen los pesos de base.
+- Limitaciones: preservar la calibración no garantiza preservar todas las habilidades. El examen final se registra sin ocultar retrocesos ni exagerar equivalencia con el maestro.

@@ -18,3 +18,5 @@ El desempeño depende de cómputo, datos y evaluación. No se promete equiparar 
 10. **v0.8 / profesor abierto:** prueba de destilación por respuestas generadas de Qwen2.5-0.5B-Instruct con revisión y licencia declaradas, separación por concepto, repaso del alumno MJON original y comparación reproducible de calidad. Escalar después datasets revisados, no solo parámetros.
 
 11. **v0.9 / aprender del profesor sin usarlo para conversar:** ampliar el conjunto docente, seleccionar checkpoint por validación, entrenar los pesos del Transformer MJON Original y medir generalización sin introducir un módulo externo.
+
+12. **v1.0 / antiolvido y aprendizaje continuo:** proteger habilidades con repaso y distilación funcional, promoción por desempeño y exámenes separados. No añadir módulos externos.

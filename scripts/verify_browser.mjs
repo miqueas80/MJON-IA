@@ -17,7 +17,7 @@ for(const item of catalog.models){
   assert.equal(model.steps,item.steps);
   const phrase='Córdoba, español y 🧪';
   assert.equal(model.codec.decode(model.codec.encode(phrase)),phrase,'Tokenizer debe ser reversible');
-  if(['v03','v04','v05','v06','v07','v08','v09'].includes(item.id))assert.ok(model.cfg.vocab_size>256 && model.codec.merges.length>0);
+  if(['v03','v04','v05','v06','v07','v08','v09','v10'].includes(item.id))assert.ok(model.cfg.vocab_size>256 && model.codec.merges.length>0);
   const logits=model.logits(model.codec.encode('Hola'));
   assert.equal(logits.length,model.cfg.vocab_size);
   assert.ok([...logits].every(Number.isFinite));

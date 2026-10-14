@@ -91,3 +91,7 @@ El pipeline descarga `Qwen/Qwen2.5-0.5B-Instruct` únicamente **durante el build
 ## MJON v0.9 — Conocimiento incorporado mediante entrenamiento
 
 Actions usa Qwen solo como docente para generar respuestas, con atribución, y entrena el Transformer MJON v0.8 para generar v0.9. El sitio estático ofrece únicamente los pesos cuantizados del alumno; **no importa Transformers.js ni ejecuta Qwen**, y no contiene ningún selector de modelos externos. `teacher-v09.json` registra la procedencia del material docente y `distillation-v09.json` muestra la comparación en preguntas reservadas. No hay segundo módulo ni aplicación adicional.
+
+## MJON Original v1.0
+
+El entrenamiento de v1.0 usa el corpus docente creado por v0.9, una copia congelada del propio MJON v0.8 y repaso. Exporta `weights-v10.txt`, `continual-v10.json` y agrega una entrada al selector. El mismo motor JS maneja todos los checkpoints: no existe un motor externo en la página. Un paso seleccionado 0 indica que la promoción fue rechazada por calidad.

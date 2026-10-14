@@ -138,9 +138,19 @@ jobs:
           python scripts/catalog_v09.py --checkpoint checkpoints/web/v09.pt --weights docs/web/weights-v09.txt --catalog docs/web/models.json
       - name: Comparar el aprendizaje de MJON original contra v0.8
         run: python scripts/benchmark_v09.py --before checkpoints/web/v08.pt --after checkpoints/web/v09.pt --teacher data/teacher_v09.json --school-holdout data/school_v07/holdout.json --school-transfer data/school_v07/transfer.json --out docs/web/distillation-v09.json --per-subject 10
+      - name: Entrenar MJON Original v1.0 con retención protegida
+        run: |
+          python -m mjon_ia.distill_v10 --base checkpoints/web/v08.pt --teacher data/teacher_v09.json --replay data/school_v07/train.json --memory data/memory_v06/train.json --school-holdout data/school_v07/holdout.json --school-transfer data/school_v07/transfer.json --memory-holdout data/memory_v06/holdout.json --out checkpoints/web/v10.pt --steps 350 --batch-size 6 --teacher-fraction 0.30 --memory-fraction 0.25 --kd-weight 0.6 --lr 0.00005 --eval-every 70 --save-every 70 --cpu-threads 2
+      - name: Exportar pesos del mismo Transformer MJON v1.0
+        run: |
+          python scripts/export_web.py --checkpoint checkpoints/web/v10.pt --out docs/web/weights-v10.txt
+          python scripts/catalog_v10.py --checkpoint checkpoints/web/v10.pt --weights docs/web/weights-v10.txt --catalog docs/web/models.json
+      - name: Evaluar retención y conceptos completamente reservados
+        run: |
+          python scripts/benchmark_v10.py --before checkpoints/web/v08.pt --after checkpoints/web/v10.pt --teacher data/teacher_v09.json --school data/school_v07/holdout.json --transfer data/school_v07/transfer.json --memory data/memory_v06/holdout.json --out docs/web/continual-v10.json
       - name: Verificar catálogo y archivos de pesos
         run: python scripts/verify_web_models.py
-      - name: Verificar inferencia JavaScript en las nueve versiones
+      - name: Verificar inferencia JavaScript en las diez versiones
         run: node scripts/verify_browser.mjs
       - name: Configurar Pages
         uses: actions/configure-pages@v5

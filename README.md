@@ -154,3 +154,17 @@ python scripts/benchmark_v09.py --before checkpoints/web/v08.pt --after checkpoi
 ```
 
 Se conservan las versiones anteriores y se trabaja **únicamente en `main`**, con commits reversibles. No se descarga ningún modelo externo al usar MJON IA.
+
+## MJON Original v1.0 — entrenamiento antiolvido
+
+En v0.9 la pérdida sobre respuestas de Qwen mejoró de 5,42 a 3,89, pero los aciertos escolares bajaron de 11/40 a 6/40. Por eso v1.0 prueba una corrección medible, **sin ejecutar otro modelo en la aplicación**:
+
+- Vuelve a los pesos originales de v0.8 y entrena con 30% de lecciones docentes, 45% de repaso escolar y 25% de memoria.
+- Una copia congelada del propio MJON v0.8 sirve de referencia durante el entrenamiento: se aplica una penalización KL sobre las predicciones antiguas para evitar el olvido. Esa copia nunca se distribuye ni se ejecuta en el navegador.
+- La selección de checkpoint se hace usando ejemplos de calibración distintos del examen final, e impide promocionar un checkpoint que reduzca los aciertos de escuela, transferencia o memoria frente a la base.
+- Si ningún candidato pasa, el checkpoint seleccionado es **el de inicio**, marcado explícitamente. Eso significa que todavía no hubo una mejora comprobada.
+- Publica `docs/web/continual-v10.json` con la evaluación final independiente y detalles de la selección.
+
+El Transformer, tokenizer, arquitectura y motor JS son exactamente los de MJON Original; Qwen se usa **solo para producir lecciones durante GitHub Actions**.
+
+[Documentación del aprendizaje continuo](docs/CONTINUAL_V10.md).
