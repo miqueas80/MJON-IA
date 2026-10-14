@@ -83,3 +83,7 @@ Tras construir v0.5, Actions genera un corpus sintético con turnos previos y co
 ## v0.7 — Cuatro materias y transferencia
 
 El workflow conserva v0.1–v0.6, crea 4.800 ejercicios sintéticos CC0 con `school_v07.py`, adapta los pesos de v0.6 a contexto 256, entrena la v0.7 y exporta `weights-v07.txt`. Publica además `school.json`: resultados por materia de pruebas con objetos/números nuevos y enunciados reformulados, comparación frente a v0.6 y retención de capacidades anteriores. La v0.7 usa el mismo motor de inferencia JavaScript local.
+
+## v0.8 — Alumno con profesor abierto
+
+El pipeline descarga `Qwen/Qwen2.5-0.5B-Instruct` únicamente **durante el build**, genera respuestas en español, registra el commit de la revisión del maestro, ajusta MJON v0.7 y exporta un octavo checkpoint cuantizado. El navegador **no descarga Qwen**, solo los pesos pequeños del alumno. Se publican `teacher-v08.json` y `distillation.json`, más referencias de licencia. Los siete modelos anteriores permanecen elegibles.

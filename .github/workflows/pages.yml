@@ -99,9 +99,31 @@ jobs:
       - name: Rendir MJON Examen y verificar retención
         run: |
           python scripts/benchmark_v07.py --before checkpoints/web/v06.pt --after checkpoints/web/v07.pt --holdout data/school_v07/holdout.json --transfer data/school_v07/transfer.json --memory-holdout data/memory_v06/holdout.json --firstwords data/instruction_v05/holdout.json --out docs/web/school.json --per-subject 10
+      - name: Preparar biblioteca del maestro abierto
+        run: |
+          python -m pip install "transformers>=4.48,<5" "huggingface_hub>=0.27,<2" "safetensors>=0.4" --quiet
+      - name: Recuperar caché del maestro Qwen
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: mjon-qwen2.5-0.5b-instruct-teacher-v1
+      - name: Generar enseñanza real con Qwen abierto
+        run: |
+          python scripts/generate_teacher_v08.py --model Qwen/Qwen2.5-0.5B-Instruct --out data/teacher_v08.json --train-limit 42 --batch-size 4 --max-new-tokens 40 --cpu-threads 2
+          cp data/teacher_v08.json docs/web/teacher-v08.json
+      - name: Entrenar alumno MJON desde v0.7 sin copiar pesos del maestro
+        run: |
+          python -m mjon_ia.distill_v08 --base checkpoints/web/v07.pt --teacher data/teacher_v08.json --replay data/school_v07/train.json --memory data/memory_v06/train.json --out checkpoints/web/v08.pt --steps 480 --batch-size 6 --teacher-fraction 0.70 --memory-fraction 0.12 --lr 0.00012 --cpu-threads 2
+      - name: Exportar alumno v0.8 con procedencia declarada
+        run: |
+          python scripts/export_web.py --checkpoint checkpoints/web/v08.pt --out docs/web/weights-v08.txt
+          python scripts/catalog_v08.py --checkpoint checkpoints/web/v08.pt --weights docs/web/weights-v08.txt --catalog docs/web/models.json
+      - name: Medir conocimientos reservados y regresión escolar
+        run: |
+          python scripts/benchmark_v08.py --before checkpoints/web/v07.pt --after checkpoints/web/v08.pt --teacher data/teacher_v08.json --school-holdout data/school_v07/holdout.json --school-transfer data/school_v07/transfer.json --out docs/web/distillation.json --per-subject 10
       - name: Verificar catálogo y archivos de pesos
         run: python scripts/verify_web_models.py
-      - name: Verificar inferencia JavaScript en las siete versiones
+      - name: Verificar inferencia JavaScript en las ocho versiones
         run: node scripts/verify_browser.mjs
       - name: Configurar Pages
         uses: actions/configure-pages@v5

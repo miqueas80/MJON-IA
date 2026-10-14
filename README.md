@@ -126,3 +126,15 @@ python -m mjon_ia.school_v07 --out data/school_v07 --per-subject 1200
 python -m mjon_ia.train_v07 --base checkpoints/web/v06.pt --out checkpoints/web/v07.pt --steps 1100 --context 256
 python scripts/benchmark_v07.py --before checkpoints/web/v06.pt --after checkpoints/web/v07.pt
 ```
+
+## v0.8 — Alumno de un modelo abierto (destilación real)
+
+Por primera vez, un **profesor abierto externo** genera respuestas sobre ciencia, matemática, lengua e informática para entrenar el **Transformer original de MJON IA**, mediante aprendizaje supervisado solo de la respuesta. El docente es [Qwen/Qwen2.5-0.5B-Instruct](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct), de licencia **Apache 2.0**; sus pesos se descargan **solo** en GitHub Actions durante la construcción y nunca pasan a los pesos del alumno. El origen exacto se guarda con ID del maestro, revisión y ejemplos generados.
+
+El alumno conserva su arquitectura, tokenizer y pesos propios de v0.7. Por diseño **no puede adquirir automáticamente las capacidades de un modelo de 500 millones de parámetros**: se intenta transferir un conjunto limitado de comportamientos y explicaciones en español. El propio profesor puede equivocarse. Nunca afirmamos que MJON sea Qwen ni que tenga su nivel.
+
+El script crea 42 preguntas para enseñar y 6 preguntas de conceptos reservados, descarta respuestas vacías o inadecuadas y mezcla los ejemplos aceptados con repaso escolar y contextual. Se incluyen los ejercicios fuente en `src/mjon_ia/teacher_v08.py`. El alumno resultante se añade como **v0.8** al selector de GitHub Pages y se evalúa frente a v0.7 en un examen escolar independiente y pérdida sobre conceptos reservados. El conjunto del profesor se publica con su procedencia en `docs/web/teacher-v08.json`; la puntuación en `docs/web/distillation.json`.
+
+No se incorpora una dependencia en tiempo de ejecución: la inferencia de v0.8 ocurre **sin internet**, como los anteriores modelos. El acceso a Internet sí es necesario **en el entrenamiento** para descargar el profesor. El proyecto no atribuye automáticamente licencia CC0 a las respuestas generadas por Qwen; el código original sigue bajo MIT y los avisos sobre el modelo externo están documentados.
+
+[Diseño, reproducibilidad y licencias](docs/DISTILLATION_V08.md).

@@ -27,3 +27,8 @@ docs/web/memory.json
 # Datos escolares experimentales, regenerables
 data/school_v07/
 docs/web/school.json
+
+# Conjunto regenerable generado por el modelo maestro (solo durante build)
+data/teacher_v08.json
+docs/web/teacher-v08.json
+docs/web/distillation.json

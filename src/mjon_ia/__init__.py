@@ -1,3 +1,3 @@
-"""Experimento independiente de modelos de lenguaje desde cero."""
+"""MJON IA: Transformer de investigación independiente."""
 
-__version__ = "0.7.0"
+__version__ = "0.8.0"

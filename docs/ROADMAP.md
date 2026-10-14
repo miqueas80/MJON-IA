@@ -14,3 +14,5 @@ El desempeño depende de cómputo, datos y evaluación. No se promete equiparar 
 8. **v0.6 / memoria contextual (actual):** entrenamiento multitur­no con correcciones, historial RAM y benchmark equilibrado de recuerdo/actualizaciones más prueba de regresión v0.5.
 
 9. **v0.7 / laboratorio escolar:** Matemática, Lengua, Ciencias y Lógica sintéticas; contexto 256, pruebas de transferencia con redacciones no entrenadas y controles de olvido. Objetivo experimental: mejorar sin confundir benchmarks de plantillas con inteligencia real.
+
+10. **v0.8 / profesor abierto:** prueba de destilación por respuestas generadas de Qwen2.5-0.5B-Instruct con revisión y licencia declaradas, separación por concepto, repaso del alumno MJON original y comparación reproducible de calidad. Escalar después datasets revisados, no solo parámetros.

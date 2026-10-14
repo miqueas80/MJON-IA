@@ -52,3 +52,12 @@
 - **Conjuntos separados:** números nuevos para Matemática, sustantivos reservados para Lengua/Ciencias/Lógica; más un segundo banco con estructuras alternativas.
 - **Evaluación:** generación libre greedy, exactitud por materia y modalidad, regresión de recuerdos y extracción simple frente a v0.6.
 - **Limitaciones:** conjunto sintético reducido; las preguntas son ejercicios introductorios, no equivalen a secundaria real, conocimiento enciclopédico ni razonamiento formal. Un resultado bueno en plantillas conocidas no implica generalización a lenguaje natural abierto.
+
+## v0.8 — Destilación desde Qwen2.5-0.5B-Instruct (profesor externo)
+
+- **Alumno:** Transformer MJON v0.7, mismo tokenizer BPE, mismos parámetros y arquitectura, finetune sobre ejemplos del maestro.
+- **Maestro:** modelo de pesos abiertos `Qwen/Qwen2.5-0.5B-Instruct` con licencia Apache-2.0. No es parte del modelo final ni se incrustan sus pesos.
+- **Método:** destilación a nivel de respuesta por supervisión SFT; no usa KL token a token, porque los tokenizadores son diferentes.
+- **Corpus:** preguntas originales controladas, respuestas generadas en CI con la revisión exacta del maestro y publicadas con procedencia. Las respuestas deben revisarse antes de reutilizarse como contenidos educativos avalados.
+- **Límites:** con 1,3M de parámetros el alumno no reproduce la capacidad del maestro de ~500M; mayor similitud con el maestro no demuestra razonamiento ni veracidad.
+- **Benchmark:** pérdida de respuesta para conceptos reservados + exactitud escolar con problemas y formulaciones no presentes en la muestra del maestro. Registra resultados antes/después y no garantiza mejora.
