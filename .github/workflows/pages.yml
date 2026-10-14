@@ -148,9 +148,21 @@ jobs:
       - name: Evaluar retención y conceptos completamente reservados
         run: |
           python scripts/benchmark_v10.py --before checkpoints/web/v08.pt --after checkpoints/web/v10.pt --teacher data/teacher_v09.json --school data/school_v07/holdout.json --transfer data/school_v07/transfer.json --memory data/memory_v06/holdout.json --out docs/web/continual-v10.json
+      - name: Generar currículo original de conocimientos fundamentales
+        run: python -m mjon_ia.knowledge_v11 --out data/knowledge_v11 --seed 1111
+      - name: Enseñar conocimientos propios a MJON sin olvidar habilidades
+        run: |
+          python -m mjon_ia.learn_v11 --base checkpoints/web/v10.pt --knowledge data/knowledge_v11/train.json --paraphrase data/knowledge_v11/paraphrase.json --unknown data/knowledge_v11/unknown.json --school data/school_v07/train.json --memory data/memory_v06/train.json --school-holdout data/school_v07/holdout.json --school-transfer data/school_v07/transfer.json --memory-holdout data/memory_v06/holdout.json --out checkpoints/web/v11.pt --steps 420 --batch-size 6 --knowledge-fraction 0.42 --memory-fraction 0.23 --kd-weight 0.55 --lr 0.00008 --eval-every 70 --save-every 70 --cpu-threads 2
+      - name: Exportar solamente los pesos neuronales de MJON Original v1.1
+        run: |
+          python scripts/export_web.py --checkpoint checkpoints/web/v11.pt --out docs/web/weights-v11.txt
+          python scripts/catalog_v11.py --checkpoint checkpoints/web/v11.pt --weights docs/web/weights-v11.txt --catalog docs/web/models.json
+      - name: Evaluar conocimientos aprendidos y preguntas nunca vistas
+        run: |
+          python scripts/benchmark_v11.py --before checkpoints/web/v10.pt --after checkpoints/web/v11.pt --paraphrase data/knowledge_v11/paraphrase.json --unknown data/knowledge_v11/unknown.json --school data/school_v07/holdout.json --transfer data/school_v07/transfer.json --memory data/memory_v06/holdout.json --out docs/web/knowledge-v11.json
       - name: Verificar catálogo y archivos de pesos
         run: python scripts/verify_web_models.py
-      - name: Verificar inferencia JavaScript en las diez versiones
+      - name: Verificar inferencia JavaScript en las once versiones
         run: node scripts/verify_browser.mjs
       - name: Configurar Pages
         uses: actions/configure-pages@v5

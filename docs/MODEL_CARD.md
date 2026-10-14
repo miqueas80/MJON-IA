@@ -66,7 +66,7 @@
 
 - **Arquitectura del alumno:** exactamente la de MJON v0.8 (~1,29 millones de parámetros, contexto 256, BPE propio); se modifican sus pesos entrenables, no se añade arquitectura ni backend.
 - **Modelo maestro exclusivamente de entrenamiento:** Qwen2.5-0.5B-Instruct, Apache 2.0, con revisión y procedencia registradas. No se publica ni se carga al ejecutar MJON IA.
-- **Datos docentes:** hasta 336 preguntas con ocho redacciones de 42 conceptos. Evaluación: 18 preguntas acerca de seis conceptos separados.
+- **Datos docentes:** hasta 340 preguntas con ocho redacciones de 42 conceptos. Evaluación: 18 preguntas acerca de seis conceptos separados.
 - **Aprendizaje:** SFT sobre respuestas breves del maestro, alternado con repaso de tareas previas. Guarda el mejor checkpoint y el último por separado.
 - **Evaluación:** pérdida de respuesta en conceptos reservados, regresión escolar y transferencia sobre redacciones no entrenadas. El profesor puede equivocarse y las etiquetas no son un currículo humano revisado.
 - **Capacidad y límites:** no se transfiere de golpe la capacidad de un modelo de 500 millones de parámetros a otro de 1,3 millones; la mejora depende del entrenamiento y de exámenes independientes.
@@ -79,3 +79,12 @@
 - Calibración: cuatro preguntas escolares por materia después de las primeras diez reservadas al examen final; ocho de memoria.
 - Publicación: un checkpoint solo se acepta si mejora la pérdida docente y no reduce aciertos en las categorías de calibración. En caso contrario se retienen los pesos de base.
 - Limitaciones: preservar la calibración no garantiza preservar todas las habilidades. El examen final se registra sin ocultar retrocesos ni exagerar equivalencia con el maestro.
+
+## v1.1 — currículo original de conocimiento fundamental
+
+- Arquitectura sin cambios: Transformer MJON, aproximadamente 1,29 millones de parámetros y 256 tokens de contexto.
+- Datos: 120 conceptos con respuestas originales en nueve materias, 90 enseñados y 18 reservados, más ejemplos de repaso anteriores.
+- Entrenamiento: cross-entropy sobre respuestas y regularización KD con una copia congelada del propio modelo. No requiere un profesor externo.
+- Separación: 30 paráfrasis de calibración, 70 paráfrasis de examen y 36 consultas de conceptos nuevos; examen escolar y memoria independientes.
+- Publicación: solo se acepta checkpoint que reduzca pérdida en calibración de conocimiento y no retroceda en aciertos previos de calibración.
+- Advertencia: una definición recordada no prueba comprensión ni razonamiento general; ningún contenido histórico, científico o escolar está avalado automáticamente para evaluación académica.

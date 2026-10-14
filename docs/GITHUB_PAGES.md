@@ -95,3 +95,7 @@ Actions usa Qwen solo como docente para generar respuestas, con atribución, y e
 ## MJON Original v1.0
 
 El entrenamiento de v1.0 usa el corpus docente creado por v0.9, una copia congelada del propio MJON v0.8 y repaso. Exporta `weights-v10.txt`, `continual-v10.json` y agrega una entrada al selector. El mismo motor JS maneja todos los checkpoints: no existe un motor externo en la página. Un paso seleccionado 0 indica que la promoción fue rechazada por calidad.
+
+## v1.1 — Conocimiento propio
+
+El pipeline genera un dataset original de conceptos elementales con `python -m mjon_ia.knowledge_v11`, reentrena el mismo Transformer MJON desde v1.0 y verifica la retención. Exporta `weights-v11.txt` y `knowledge-v11.json`. El navegador no descarga Qwen ni incluye modelos externos: el material es absorbido únicamente en los pesos entrenados de MJON.

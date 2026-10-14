@@ -38,3 +38,6 @@ docs/web/teacher-v09.json
 docs/web/distillation-v09.json
 
 docs/web/continual-v10.json
+
+data/knowledge_v11/
+docs/web/knowledge-v11.json

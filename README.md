@@ -143,7 +143,7 @@ No se incorpora una dependencia en tiempo de ejecución: la inferencia de v0.8 o
 
 **No hay ningún segundo módulo de IA**, motor de inferencia Qwen ni «cerebro alternativo» en el sitio. Qwen2.5-0.5B-Instruct (pesos Apache 2.0) participa **solo en GitHub Actions como profesor**, creando ejemplos en español. Luego MJON IA Original, que conserva su Transformer y su tokenizador propios, **actualiza sus propios pesos mediante aprendizaje supervisado** y ejecuta todas sus respuestas sin Qwen.
 
-Esta ampliación prepara hasta **336 preguntas docentes** (42 conceptos originales con ocho formulaciones) y **18 ejemplos reservados** de seis conceptos distintos. Filtra respuestas demasiado largas para los 256 tokens de contexto y entrena el alumno a partir de v0.8 con repaso escolar y de memoria. El entrenamiento guarda el mejor checkpoint según pérdida de validación y repaso, y exporta sus pesos como v0.9 a la misma página de MJON IA. También compara v0.8 y v0.9 en un examen independiente de 40 preguntas escolares y 40 reformuladas. El resultado puede mejorar, empeorar o seguir siendo insuficiente: no se presuponen aciertos.
+Esta ampliación prepara hasta **340 preguntas docentes** (42 conceptos originales con ocho formulaciones) y **18 ejemplos reservados** de seis conceptos distintos. Filtra respuestas demasiado largas para los 256 tokens de contexto y entrena el alumno a partir de v0.8 con repaso escolar y de memoria. El entrenamiento guarda el mejor checkpoint según pérdida de validación y repaso, y exporta sus pesos como v0.9 a la misma página de MJON IA. También compara v0.8 y v0.9 en un examen independiente de 40 preguntas escolares y 40 reformuladas. El resultado puede mejorar, empeorar o seguir siendo insuficiente: no se presuponen aciertos.
 
 **Límite técnico:** el profesor tiene cientos de millones de parámetros y MJON Original ~1,3 millones; no hay forma de copiar mágicamente toda su inteligencia. Un corpus con más ejemplos permite entrenar capacidades específicas, pero no garantiza conversación general ni razonar como Qwen. Los pesos, la atribución y los datos de enseñanza están documentados en [Entrenamiento v0.9](docs/DISTILLATION_V09.md).
 
@@ -168,3 +168,19 @@ En v0.9 la pérdida sobre respuestas de Qwen mejoró de 5,42 a 3,89, pero los ac
 El Transformer, tokenizer, arquitectura y motor JS son exactamente los de MJON Original; Qwen se usa **solo para producir lecciones durante GitHub Actions**.
 
 [Documentación del aprendizaje continuo](docs/CONTINUAL_V10.md).
+
+## MJON IA Original v1.1 — conocimiento redactado y enseñado directamente
+
+En lugar de instalar una segunda IA, la v1.1 agrega un currículo **original de 120 conceptos en diez áreas**: Biología, Química, Física, Matemática, Lengua, Historia/Ciudadanía, Geografía, Informática y Pensamiento Crítico/Límites. Son explicaciones concisas de fundamentos; no equivalen al conocimiento completo de un modelo general.
+
+- **100 conceptos se enseñan** mediante 400 pares de preguntas/respuestas de distintas formulaciones.
+- **100 paráfrasis nuevas** no participan en gradientes; las primeras 30 sirven para selección de checkpoint y otras **70 para examen final**.
+- **20 conceptos completamente reservados** se prueban en 40 preguntas nuevas y no se usan en el entrenamiento.
+- **Sin olvido intencional:** se parte de los pesos del Transformer propio v1.0, se mezcla currículo, escuela y memoria, y se regulariza con una copia congelada del propio MJON.
+- **Sin progreso ficticio:** si un ajuste no aumenta la calidad sobre paráfrasis nuevas o retrocede en la calibración escolar/memoria, se publica la base y queda registrado el paso 0.
+
+El modelo sigue siendo el **Transformer MJON entrenado con sus propios pesos**, BPE local y JavaScript estático para ejecutar sin API ni motor externo. Qwen ya no participa en la inferencia, y el currículo nuevo no requiere un profesor externo ni descargar otro modelo.
+
+El examen visible en `docs/web/knowledge-v11.json` compara las respuestas generadas por v1.0 y v1.1 e incluye los errores. La licencia CC0 cubre el texto original de esta versión; no se copian obras educativas ajenas.
+
+[Documentación, límites y metodología](docs/KNOWLEDGE_V11.md).

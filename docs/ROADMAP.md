@@ -20,3 +20,5 @@ El desempeño depende de cómputo, datos y evaluación. No se promete equiparar 
 11. **v0.9 / aprender del profesor sin usarlo para conversar:** ampliar el conjunto docente, seleccionar checkpoint por validación, entrenar los pesos del Transformer MJON Original y medir generalización sin introducir un módulo externo.
 
 12. **v1.0 / antiolvido y aprendizaje continuo:** proteger habilidades con repaso y distilación funcional, promoción por desempeño y exámenes separados. No añadir módulos externos.
+
+13. **v1.1 / primer conocimiento fundamental redactado:** 120 conceptos en diez áreas con respuestas originales, 360 muestras de entrenamiento, 70 paráfrasis de examen, 40 preguntas de conceptos nuevos, repaso y promoción antiolvido.
