@@ -82,7 +82,7 @@ class TrainingTests(unittest.TestCase):
             del payload['optimizer_state_dict']
             torch.save(payload,ck)
             with self.assertRaisesRegex(ValueError,'antiguo'):
-                run(self._args(data,ck,resume=str(ck),steps=3)
+                run(self._args(data,ck,resume=str(ck),steps=3))
 
 
 if __name__=='__main__':

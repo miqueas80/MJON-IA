@@ -107,7 +107,7 @@ def run(args):
             val=validation_loss(model,validation,cfg.context,device)
             metrics={'step':step,'train_loss':round(mean,5),
                      'val_loss':round(val,5),
-                     'val_perplexity':round(float(torch.exp(torch.tensor(min(val,20.))),2)}
+                     'val_perplexity':round(float(torch.exp(torch.tensor(min(val,20.0)))),2)}
             history.append(metrics);print('Métricas:',metrics)
         if step%args.save_every==0 or step==args.steps:checkpoint(step)
     return out
