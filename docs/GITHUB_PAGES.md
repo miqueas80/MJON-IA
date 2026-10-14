@@ -79,3 +79,7 @@ Tras entrenar v0.4, GitHub Actions lo usa como base para un ajuste supervisado d
 ## v0.6 — Recuerdos y correcciones
 
 Tras construir v0.5, Actions genera un corpus sintético con turnos previos y correcciones, ajusta el propio modelo desde los pesos v0.5 y exporta `weights-v06.txt`. Se publica también `memory.json`, con resultados de 48 casos de recuerdo y corrección separados de entrenamiento, comparación v0.5/v0.6 y retención de la tarea anterior. En la web, las últimas tres parejas de mensajes se mantienen solo durante la sesión actual; la inferencia continúa en el dispositivo.
+
+## v0.7 — Cuatro materias y transferencia
+
+El workflow conserva v0.1–v0.6, crea 4.800 ejercicios sintéticos CC0 con `school_v07.py`, adapta los pesos de v0.6 a contexto 256, entrena la v0.7 y exporta `weights-v07.txt`. Publica además `school.json`: resultados por materia de pruebas con objetos/números nuevos y enunciados reformulados, comparación frente a v0.6 y retención de capacidades anteriores. La v0.7 usa el mismo motor de inferencia JavaScript local.

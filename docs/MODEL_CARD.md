@@ -44,3 +44,11 @@
 - **Evaluación:** 48 casos equilibrados de recuerdo/corrección con seis nombres reservados en entrenamiento; comparación directa v0.5/v0.6, más retención de 48 preguntas de v0.5.
 - **Inferencia web:** historial temporal de hasta tres intercambios enviado únicamente al propio modelo ejecutado en JavaScript en el navegador. No persiste al recargar.
 - **Advertencias:** las plantillas del corpus son conocidas y la memoria está limitada por una ventana de 128 tokens BPE. La evaluación no representa diálogo libre, memoria duradera ni razonamiento general.
+
+## v0.7 — MJON Escuela
+
+- **Origen:** mismo Transformer propio de v0.6 con pesos reentrenados, sin checkpoints externos. Ventana extendida a 256 tokens BPE, aprox. 1,29M parámetros; las nuevas posiciones parten de una copia cíclica de las anteriores.
+- **Objetivos sintéticos:** 4 materias con problemas elementales en español y pérdida supervisada solo en la respuesta.
+- **Conjuntos separados:** números nuevos para Matemática, sustantivos reservados para Lengua/Ciencias/Lógica; más un segundo banco con estructuras alternativas.
+- **Evaluación:** generación libre greedy, exactitud por materia y modalidad, regresión de recuerdos y extracción simple frente a v0.6.
+- **Limitaciones:** conjunto sintético reducido; las preguntas son ejercicios introductorios, no equivalen a secundaria real, conocimiento enciclopédico ni razonamiento formal. Un resultado bueno en plantillas conocidas no implica generalización a lenguaje natural abierto.

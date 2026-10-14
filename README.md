@@ -110,3 +110,19 @@ python -m mjon_ia.memory_v06 --out data/memory_v06
 python -m mjon_ia.finetune_v06 --base checkpoints/web/v05.pt --out checkpoints/web/v06.pt
 python scripts/benchmark_v06.py --base checkpoints/web/v05.pt --tuned checkpoints/web/v06.pt
 ```
+
+## MJON IA v0.7 — MJON Escuela (laboratorio escolar)
+
+La v0.7 reutiliza los pesos neuronales originales de v0.6 y **duplica la ventana de contexto de 128 a 256 tokens BPE**, extendiendo las posiciones existentes. No cambia a un modelo de terceros ni introduce servicios de pago.
+
+Se entrenan cuatro familias de ejercicios sintéticos redactados en español: **Matemática** (sumas y restas en secuencia), **Lengua** (comprensión explícita de dos datos), **Ciencias** (magnitudes descritas en fichas) y **Lógica** (orden relativo de tres entidades). Se generan 4.800 problemas de entrenamiento propios CC0, 128 de entidades/números reservados y otros 128 con reformulaciones no presentes en las plantillas de aprendizaje. Se mezclan prácticas de v0.5 y v0.6 para minimizar el olvido.
+
+**Evaluación visible**: el informe `docs/web/school.json` compara v0.6 y v0.7 en 40 problemas reservados, 40 reformulados, más pruebas de retención de memoria y respuestas breves. No se maquilla una puntuación baja: el informe publica ejemplos de aciertos y fallos. La interfaz permite seleccionar los siete modelos históricos y ejecuta la v0.7 localmente.
+
+Este avance no equivale a cursar, aprobar ni comprender la secundaria argentina. El objetivo es un **banco de pruebas multiasignatura y de transferencia** que permita construir capacidades medibles; faltan textos amplios de origen verificable, currículo completo y evaluación humana.
+
+```bash
+python -m mjon_ia.school_v07 --out data/school_v07 --per-subject 1200
+python -m mjon_ia.train_v07 --base checkpoints/web/v06.pt --out checkpoints/web/v07.pt --steps 1100 --context 256
+python scripts/benchmark_v07.py --before checkpoints/web/v06.pt --after checkpoints/web/v07.pt
+```

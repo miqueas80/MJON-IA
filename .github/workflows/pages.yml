@@ -87,9 +87,21 @@ jobs:
       - name: Evaluar memoria, correcciones y retención v0.5
         run: |
           python scripts/benchmark_v06.py --base checkpoints/web/v05.pt --tuned checkpoints/web/v06.pt --holdout data/memory_v06/holdout.json --firstwords data/instruction_v05/holdout.json --out docs/web/memory.json --per-group 8
+      - name: Crear materias y examen v0.7 independientes
+        run: python -m mjon_ia.school_v07 --out data/school_v07 --per-subject 1200 --heldout 32 --seed 707
+      - name: Ajustar v0.7 desde v0.6 con contexto ampliado
+        run: |
+          python -m mjon_ia.train_v07 --base checkpoints/web/v06.pt --train data/school_v07/train.json --holdout data/school_v07/holdout.json --transfer data/school_v07/transfer.json --replay05 data/instruction_v05/train.json --replay06 data/memory_v06/train.json --out checkpoints/web/v07.pt --context 256 --steps 1100 --eval-every 220 --save-every 220 --batch-size 6 --lr 0.0002 --replay-v05 0.12 --replay-v06 0.12 --cpu-threads 2
+      - name: Publicar pesos v0.7 y mantener versiones históricas
+        run: |
+          python scripts/export_web.py --checkpoint checkpoints/web/v07.pt --out docs/web/weights-v07.txt
+          python scripts/catalog_v07.py --checkpoint checkpoints/web/v07.pt --weights docs/web/weights-v07.txt --catalog docs/web/models.json
+      - name: Rendir MJON Examen y verificar retención
+        run: |
+          python scripts/benchmark_v07.py --before checkpoints/web/v06.pt --after checkpoints/web/v07.pt --holdout data/school_v07/holdout.json --transfer data/school_v07/transfer.json --memory-holdout data/memory_v06/holdout.json --firstwords data/instruction_v05/holdout.json --out docs/web/school.json --per-subject 10
       - name: Verificar catálogo y archivos de pesos
         run: python scripts/verify_web_models.py
-      - name: Verificar inferencia JavaScript en las seis versiones
+      - name: Verificar inferencia JavaScript en las siete versiones
         run: node scripts/verify_browser.mjs
       - name: Configurar Pages
         uses: actions/configure-pages@v5

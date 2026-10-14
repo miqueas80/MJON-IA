@@ -12,3 +12,5 @@ El desempeño depende de cómputo, datos y evaluación. No se promete equiparar 
 7. **v0.5 / primeras palabras:** ajuste supervisado del modelo propio, separación de ítems de prueba, comparación explícita antes/después y generación corta basada en tokens del modelo. Aún no es un asistente general.
 
 8. **v0.6 / memoria contextual (actual):** entrenamiento multitur­no con correcciones, historial RAM y benchmark equilibrado de recuerdo/actualizaciones más prueba de regresión v0.5.
+
+9. **v0.7 / laboratorio escolar:** Matemática, Lengua, Ciencias y Lógica sintéticas; contexto 256, pruebas de transferencia con redacciones no entrenadas y controles de olvido. Objetivo experimental: mejorar sin confundir benchmarks de plantillas con inteligencia real.
