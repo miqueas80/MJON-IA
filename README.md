@@ -206,3 +206,11 @@ La v1.1 mostró una limitación clara: **0 de 70 paráfrasis correctas** pese al
 **No es una segunda aplicación ni un modelo chino oculto.** Es código de la próxima etapa neuronal de MJON, sin reemplazar el modelo publicado hasta que supere las pruebas y tenga pesos realmente entrenados. Ver [arquitectura, comandos y límites](docs/NEURAL_CORE.md). La CI rápida [`neural-smoke.yml`](.github/workflows/neural-smoke.yml) hace pruebas de gradientes, atención causal, caché y aprendizaje CPU sin descargar modelos de terceros.
 
 También se corrigió la ruta del JSON generado por Graphify: las 183 entidades y 631 enlaces se habían extraído correctamente, pero la tarea de GitHub buscaba el archivo en un directorio incorrecto.
+
+## MJON Neural · entrenamiento de instrucciones sobre pesos originales
+
+Se incorporó una ruta **real de fine-tuning supervisado** del nuevo `MJONNeuralCore`, sin modelos externos en el navegador. El trainer `src/mjon_ia/neural_sft.py` toma los pesos preentrenados por MJON, supervisa únicamente las respuestas, mantiene ejemplos reservados por grupo conceptual y guarda el mejor checkpoint reanudable.
+
+Un generador reproducible produce **540 preguntas sobre 120 conceptos** de autoría original en formato JSONL, tanto para pruebas de preentrenamiento como de SFT. La evaluación `scripts/eval_neural_sft.py` compara la generación real, antes y después, en preguntas de grupos que nunca participaron en gradientes. No se publican automáticamente redes con pesos aleatorios o entrenamiento insuficiente.
+
+El workflow de pruebas rápidas ejecuta además un ciclo completo y pequeño de entrenamiento CPU, evaluando el funcionamiento del núcleo y del ajuste de instrucciones. Este material no es suficiente para igualar un LLM de frontera. [Ver metodología y comandos](docs/NEURAL_SFT.md).

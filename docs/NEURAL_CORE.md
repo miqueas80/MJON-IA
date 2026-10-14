@@ -69,3 +69,7 @@ Se evaluará, con pruebas nunca vistas y revisadas, si el nuevo modelo:
 - Puede ejecutarse con latencia y memoria aceptables en los dispositivos elegidos.
 
 **Paridad con los mejores modelos chinos:** no demostrada ni técnicamente alcanzable hoy con 1,3M de parámetros y CPU gratuito. Este trabajo abre una ruta auténtica para aumentar escala y calidad sin dejar de ser MJON; el siguiente cuello de botella es conseguir datos autorizados y GPUs suficientes.
+
+## Segunda etapa: aprendizaje supervisado de instrucciones
+
+Una vez entrenado el Neural Core con corpus legales suficientemente grandes, `mjon_ia.neural_sft` realiza SFT directamente sobre sus pesos. La pérdida se calcula solo sobre tokens de respuestas y el conjunto de evaluación se mantiene separado por concepto o documento. `scripts/eval_neural_sft.py` genera respuestas del propio modelo y compara las de antes y después. Véase [NEURAL_SFT.md](NEURAL_SFT.md). Este nuevo entrenador aún no sustituye al modelo web: la publicación requerirá un runtime equivalente y resultados validados.

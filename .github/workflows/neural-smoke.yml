@@ -6,7 +6,11 @@ on:
     paths:
       - 'src/mjon_ia/neural_core.py'
       - 'src/mjon_ia/scalable_train.py'
+      - 'src/mjon_ia/neural_sft.py'
       - 'tests/test_neural_core.py'
+      - 'tests/test_neural_sft.py'
+      - 'scripts/build_neural_curriculum.py'
+      - 'scripts/eval_neural_sft.py'
       - '.github/workflows/neural-smoke.yml'
       - 'pyproject.toml'
   workflow_dispatch:
@@ -31,3 +35,6 @@ jobs:
           python -m pip install -e . --no-deps
       - name: Validar la nueva arquitectura y entrenar realmente en CPU
         run: python -m unittest discover -s tests -p 'test_neural_core.py' -v
+      - name: Verificar entrenamiento supervisado REAL sobre pesos MJON
+        run: |
+          python -m unittest discover -s tests -p 'test_neural_sft.py' -v
