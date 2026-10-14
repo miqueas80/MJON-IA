@@ -8,3 +8,5 @@
 6. **v1.0 / publicación:** API, inferencia optimizada, pesos versionados y documentación completa.
 
 El desempeño depende de cómputo, datos y evaluación. No se promete equiparar sistemas comerciales sin mediciones.
+
+7. **v0.5 / primeras palabras:** ajuste supervisado del modelo propio, separación de ítems de prueba, comparación explícita antes/después y generación corta basada en tokens del modelo. Aún no es un asistente general.

@@ -119,7 +119,7 @@ export class MJONTransformer{
     let logits;for(let i=0;i<seq.length;i++)logits=this.step(seq[i],i,cache);
     return logits;
   }
-  async generate(prompt,{count=80,temperature=.85,topK=24,onToken=()=>{},shouldStop=()=>false}={}){
+  async generate(prompt,{count=80,temperature=.85,topK=24,stopAtNewline=false,onToken=()=>{},shouldStop=()=>false}={}){
     if(temperature<=0)throw Error('Temperatura inválida');
     const history=this.codec.encode(prompt),newIds=[];
     if(!history.length)throw Error('Prompt vacío');
@@ -137,7 +137,10 @@ export class MJONTransformer{
       const prob=softmax(ids.map(id=>logits[id]/temperature));
       let r=Math.random(),chosen=ids[ids.length-1];
       for(let j=0;j<ids.length;j++){r-=prob[j];if(r<=0){chosen=ids[j];break}}
-      history.push(chosen);newIds.push(chosen);onToken(this.codec.decode(newIds),newIds.length);
+      history.push(chosen);newIds.push(chosen);
+      const visible=this.codec.decode(newIds);
+      if(stopAtNewline && visible.includes('\n')){onToken(visible.split('\n',1)[0],newIds.length);break}
+      onToken(visible,newIds.length);
       if(i+1<count){
         if(cache[0].k.length>=c.context)prefill();
         else logits=this.step(chosen,cache[0].k.length,cache);

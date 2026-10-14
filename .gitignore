@@ -16,3 +16,6 @@ data/synthetic_es.txt
 data/corpus_v04.txt
 data/benchmark_v04.json
 docs/web/benchmarks.json
+
+data/instruction_v05/
+docs/web/firstwords.json

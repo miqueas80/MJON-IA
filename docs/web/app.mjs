@@ -3,7 +3,7 @@ import {decodeWeights, MJONTransformer} from './runtime.mjs';
 const $ = id => document.getElementById(id);
 const form=$('chat-form'), input=$('prompt'), messages=$('messages');
 const status=$('status'),send=$('send'),stop=$('stop'),reset=$('reset'),selector=$('model-select');
-let model=null, models=[], benchmark=null, busy=false, abort=false, serial=0;
+let model=null, models=[], benchmark=null, firstwords=null, busy=false, abort=false, serial=0;
 
 function setStatus(value,kind=''){status.textContent=value;status.dataset.kind=kind;}
 function bubble(role,text){
@@ -56,7 +56,19 @@ async function loadModel(id){
     $('model-description').textContent=selected.description;
     const metric=benchmark?.results?.find(x=>x.model===selected.id);
     const result=$('benchmark-info');
-    if(result)result.textContent=metric?`MJON Bench (fuera de plantilla): ${metric.greedy_exact_count}/${metric.evaluated_numeric_probes} respuestas numéricas correctas; ${metric.pairwise_count}/${metric.evaluated_numeric_probes} preferencias acertadas. No mide comprensión general.`:'Este modelo no tiene una evaluación de generalización publicada.';
+    const first=firstwords?.models?.find(x=>x.checkpoint===selected.id);
+    const baseline=firstwords?.models?.find(x=>x.checkpoint==='v04');
+    if(result) result.textContent=first?`MJON First Words: ${first.exact}/${first.total} extracciones correctas; v0.4 sin ajuste: ${baseline?.exact??'?'}/${baseline?.total??'?'}. No implica razonamiento general.`:
+      metric?`MJON Bench: ${metric.greedy_exact_count}/${metric.evaluated_numeric_probes} respuestas numéricas correctas, ${metric.pairwise_count}/${metric.evaluated_numeric_probes} preferencias acertadas.`:
+      'Este modelo no tiene benchmark publicado.';
+    const examples=$('examples');examples.replaceChildren();
+    const prompts=selected.id==='v05'?
+      ['Ficha del prisma: color azul. ¿Qué color indica la ficha?','El reactor es de vidrio. Decime el material.','Registro del depósito. Estado = líquido. Respondé el estado.']:
+      ['Hola.','¿Qué es una inteligencia artificial?','¿Qué es aprender?'];
+    for(const q of prompts){
+      const btn=document.createElement('button');btn.type='button';btn.dataset.prompt=q;
+      btn.textContent=q.length>42?q.slice(0,39)+'…':q;examples.append(btn);
+    }
     $('last-run').textContent='—';
     messages.replaceChildren();clear();
     setStatus('Modelo cargado · listo','ready');
@@ -84,7 +96,10 @@ form.addEventListener('submit',async e=>{
   setStatus('Generando en tu dispositivo','working');const start=performance.now();
   try{
     const result=await model.generate(`Usuario: ${question}\nAsistente:`,{
-      count:Number($('count').value),temperature:Number($('temperature').value),
+      count:selector.value==='v05'?24:Number($('count').value),
+      temperature:selector.value==='v05'?1:Number($('temperature').value),
+      topK:selector.value==='v05'?1:24,
+      stopAtNewline:selector.value==='v05',
       shouldStop:()=>abort,
       onToken:s=>{answer.textContent=s||'…';messages.scrollTop=messages.scrollHeight;}
     });
@@ -105,6 +120,7 @@ async function init(){
     models=catalog.models;
     enableModelSelection(models);
     try { const scores=await fetch('./web/benchmarks.json',{cache:'no-cache'}); if(scores.ok) benchmark=await scores.json(); } catch (_) { /* evaluación opcional */ }
+    try { const scores=await fetch('./web/firstwords.json',{cache:'no-cache'}); if(scores.ok) firstwords=await scores.json(); } catch (_) { /* evaluación opcional */ }
     const selected=models[models.length-1].id;
     selector.value=selected;
     await loadModel(selected);

@@ -27,3 +27,12 @@
 - **Entrenamiento:** 1000 pasos, lotes 4 × gradientes acumulados 2, CPU de GitHub Actions.
 - **Benchmark:** preguntas sintéticas fuera de plantilla, tasas de respuesta numérica exacta y preferencia correcta frente a un distractor. Reportes de v0.3 y v0.4 en `docs/web/benchmarks.json` tras cada despliegue.
 - **Advertencias:** no mide inteligencia general, puede memorizar plantillas o generar errores y no tiene alineamiento instructivo avanzado. Los resultados en pruebas se publican tal como son, sin promesas de mejora.
+
+## Variante v0.5 — Primeras palabras
+
+- **Base:** MJON IA v0.4 (1.271.808 parámetros), sin pesos de terceros.
+- **Objetivo SFT:** respuesta breve ante una pregunta que presenta de forma explícita un color, material o estado.
+- **Dataset:** 1.360 ejemplos sintéticos CC0, generados localmente.
+- **Evaluación:** 102 ejemplos con nombres de objetos que no aparecen en los ejemplos SFT; selección determinista de 48 para el benchmark web.
+- **Métrica:** porcentaje de respuestas generadas libremente que coinciden con la etiqueta esperada, sin elegir entre candidatos predefinidos.
+- **Limitación:** aprender a extraer una etiqueta no equivale a razonar, conocer el mundo ni dialogar de manera general. Los resultados de v0.4/v0.5 son comparables solo dentro de esta misma prueba.

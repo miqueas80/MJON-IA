@@ -82,3 +82,17 @@ python scripts/evaluate_v04.py --checkpoints checkpoints/v04.pt --benchmark data
 ```
 
 La investigación sigue siendo experimental. No hay API externa obligatoria ni promesas de equivalencia con un LLM comercial.
+
+## MJON IA v0.5: primeras palabras con supervisión de respuestas
+
+Esta etapa **no agrega otro modelo desde cero**: adapta mediante entrenamiento supervisado (SFT) nuestro Transformer v0.4 de 1.271.808 parámetros, reutilizando sus pesos y el tokenizador propio BPE. La pérdida solo se calcula sobre la respuesta; el prompt no cuenta como objetivo de predicción. Los checkpoints mantienen pesos y estado del optimizador para continuar el ajuste.
+
+**Corpus propio CC0**: 1.360 ejemplos generados determinísticamente sobre color, material y estado. **Evaluación separada**: 102 combinaciones con seis sustantivos ausentes de esos ejemplos, de los cuales MJON First Words examina 48 por generación libre determinista. Publicamos el puntaje real de v0.4 (sin SFT) junto al de v0.5, incluyendo respuestas equivocadas. Se miden únicamente extracciones de atributos explícitos, **no conversaciones abiertas ni razonamiento general**.
+
+La web conserva v0.1-v0.4 y agrega v0.5 con ejemplos apropiados para sus capacidades. GitHub Actions genera los pesos y el informe `docs/web/firstwords.json` durante la publicación.
+
+```bash
+python -m mjon_ia.instruction_v05 --out data/instruction_v05
+python -m mjon_ia.finetune_v05 --base checkpoints/web/v04.pt --out checkpoints/web/v05.pt
+python scripts/benchmark_v05.py --base checkpoints/web/v04.pt --tuned checkpoints/web/v05.pt
+```

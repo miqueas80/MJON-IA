@@ -71,3 +71,7 @@ El workflow verifica el manifiesto y prueba inferencia real de ambos modelos en 
 La compilación también genera un corpus sintético CC0 con 1800 diálogos y entrena desde cero otro Transformer (aprox. 505.920 parámetros, vocabulario BPE de 512 unidades, 96 tokens de contexto, 500 pasos). La web descarga esos pesos en formato int8 y los ejecuta en el navegador con un cache KV causal. Los modelos anteriores permanecen como opciones.
 
 El entrenamiento de este perfil es un experimento computacional, no una garantía de conversaciones coherentes. Las métricas solo comparan una parte pequeña de datos sintéticos; no miden razonamiento general. GitHub Pages sirve archivos estáticos: el entrenamiento se ejecuta en GitHub Actions.
+
+## Nueva v0.5: primeras palabras
+
+Tras entrenar v0.4, GitHub Actions lo usa como base para un ajuste supervisado de 900 pasos en tareas de lectura de atributos explícitos (color, material y estado). Publica el peso separado `weights-v05.txt` y un informe `firstwords.json` con evaluación libre frente al modelo v0.4 sobre los mismos ejemplos reservados. El navegador ofrece un modo de respuesta breve determinista para v0.5. No hay respuestas programadas en la web; el texto lo genera el Transformer.

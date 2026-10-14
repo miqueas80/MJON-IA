@@ -64,9 +64,20 @@ jobs:
           python scripts/catalog_v04.py --checkpoint checkpoints/web/v04.pt --weights docs/web/weights-v04.txt --catalog docs/web/models.json
       - name: Ejecutar MJON Bench con preguntas no entrenadas
         run: python scripts/evaluate_v04.py --benchmark data/benchmark_v04.json --checkpoints checkpoints/web/v03.pt checkpoints/web/v04.pt --out docs/web/benchmarks.json --limit 12
+      - name: Generar instrucciones v0.5 y ejemplos reservados
+        run: python -m mjon_ia.instruction_v05 --out data/instruction_v05
+      - name: Ajustar v0.5 con respuestas supervisadas
+        run: |
+          python -m mjon_ia.finetune_v05 --base checkpoints/web/v04.pt --train data/instruction_v05/train.json --holdout data/instruction_v05/holdout.json --out checkpoints/web/v05.pt --steps 900 --eval-every 150 --save-every 150 --batch-size 8 --grad-accum 1 --lr 0.0003 --cpu-threads 2
+      - name: Exportar pesos v0.5 y mantener versiones anteriores
+        run: |
+          python scripts/export_web.py --checkpoint checkpoints/web/v05.pt --out docs/web/weights-v05.txt
+          python scripts/catalog_v05.py --checkpoint checkpoints/web/v05.pt --weights docs/web/weights-v05.txt --catalog docs/web/models.json
+      - name: Evaluar generación libre contra v0.4
+        run: python scripts/benchmark_v05.py --base checkpoints/web/v04.pt --tuned checkpoints/web/v05.pt --holdout data/instruction_v05/holdout.json --out docs/web/firstwords.json --limit 48
       - name: Verificar catálogo y archivos de pesos
         run: python scripts/verify_web_models.py
-      - name: Verificar inferencia JavaScript en las cuatro versiones
+      - name: Verificar inferencia JavaScript en las cinco versiones
         run: node scripts/verify_browser.mjs
       - name: Configurar Pages
         uses: actions/configure-pages@v5
